@@ -59,5 +59,7 @@ async function showSectionWithInclude(sectionName) {
     chargerTypesPret();
     chargerEtablissements();
     afficherClientDepuisLocalStorage();
+  } else if(sectionName === 'interet') {
+    chargerInterets();
   }
 }
