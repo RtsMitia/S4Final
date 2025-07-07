@@ -68,9 +68,12 @@ async function showSectionWithInclude(sectionName) {
   
   // Charger les données spécifiques à la section
   if (sectionName === 'type-pret') {
-    chargerTypesPret();
+      chargerTypesPret();
   }
   else if (sectionName === 'ajouter-fond-depart') {
       chargerEtablissements();
+  }
+  else if (sectionName === 'interet') {
+      chargerInterets();
   }
 }

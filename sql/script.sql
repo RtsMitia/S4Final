@@ -102,7 +102,7 @@ CREATE TABLE s4_final_remboursement (
    annuite DECIMAL(15,2),
    interet DECIMAL(15,2),
    capital_rembourse DECIMAL(15,2),
-   int mois, 
-   int annee,
+   mois INT, 
+   annee INT,
    FOREIGN KEY(id_pret) REFERENCES s4_final_pret(id)
 );
