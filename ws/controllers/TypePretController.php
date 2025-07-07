@@ -1,13 +1,16 @@
 <?php
 require_once __DIR__ . '/../models/TypePret.php';
-require_once __DIR__ . '/../helpers/Utils.php';
 
 class TypePretController {
 
     public static function getAll() {
-        $types = TypePret::getAll();
-        Flight::json($types);
-        error_log(print_r($types, true));
+        try {
+            $types = TypePret::getAll();
+            Flight::json($types);
+        } catch (Exception $e) {
+            error_log('Erreur getAll: ' . $e->getMessage());
+            Flight::json(['error' => 'Erreur lors de la récupération des types'], 500);
+        }
     }
 
     public static function getById($id) {
@@ -16,15 +19,42 @@ class TypePretController {
     }
 
     public static function create() {
-        $data = Flight::request()->data;
-        $id = TypePret::create($data);
-        Flight::json(['message' => 'Type de prêt ajouté', 'id' => $id]);
+        try {
+            $data = Flight::request()->data;
+            if (!$data || (!isset($data->nom) && !isset($data->taux))) {
+                $data = (object) $_POST;
+            }
+            
+            if (!isset($data->nom) || !isset($data->taux)) {
+                Flight::json(['error' => 'Nom et taux sont requis'], 400);
+                return;
+            }
+            
+            $id = TypePret::create($data);
+            Flight::json(['message' => 'Type de prêt ajouté', 'id' => $id]);
+        } catch (Exception $e) {
+            error_log('Erreur create: ' . $e->getMessage());
+            Flight::json(['error' => 'Erreur lors de la création: ' . $e->getMessage()], 500);
+        }
     }
 
     public static function update($id) {
-        $data = Flight::request()->data;
-        TypePret::update($id, $data);
-        Flight::json(['message' => 'Type de prêt modifié']);
+        try {
+            $input = file_get_contents('php://input');
+            parse_str($input, $parsedData);
+            $data = (object) $parsedData;
+            
+            if (!isset($data->nom) || !isset($data->taux)) {
+                Flight::json(['error' => 'Nom et taux sont requis'], 400);
+                return;
+            }
+            
+            TypePret::update($id, $data);
+            Flight::json(['message' => 'Type de prêt modifié']);
+        } catch (Exception $e) {
+            error_log('Erreur update: ' . $e->getMessage());
+            Flight::json(['error' => 'Erreur lors de la modification: ' . $e->getMessage()], 500);
+        }
     }
 
     public static function delete($id) {
