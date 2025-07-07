@@ -27,6 +27,10 @@
     </form>
   </div>
 
+  <div class="chart-container" style="max-width: 1000px; margin: 20px auto;">
+    <canvas id="interestChart"></canvas>
+  </div>
+
   <div class="table-container">
     <table id="table-interet">
       <thead>
@@ -149,6 +153,13 @@
       overflow: hidden;
     }
 
+    .chart-container {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
     #table-interet {
       width: 100%;
       border-collapse: collapse;
@@ -180,7 +191,6 @@
       border-bottom: none;
     }
 
-    /* Total row styling */
     #table-interet tbody tr[style*="font-weight: bold"] {
       background-color: #e8f4fd !important;
       border-top: 2px solid #3498db;
@@ -190,7 +200,6 @@
       background-color: #e8f4fd !important;
     }
 
-    /* Responsive design */
     @media (max-width: 768px) {
       .form-row {
         flex-direction: column;
@@ -211,6 +220,10 @@
       #table-interet th,
       #table-interet td {
         padding: 10px 12px;
+      }
+
+      .chart-container {
+        padding: 15px;
       }
     }
   </style>

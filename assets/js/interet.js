@@ -1,3 +1,5 @@
+let interestChart = null;
+
 function chargerInterets() {
     ajax('GET', '/remboursement', null, (response) => {
         const tableBody = document.querySelector('#table-interet tbody');
@@ -13,6 +15,7 @@ function chargerInterets() {
             const row = document.createElement('tr');
             row.innerHTML = '<td colspan="3" style="text-align: center;">Aucun intérêt trouvé</td>';
             tableBody.appendChild(row);
+            updateChart([]);
             return;
         }
         
@@ -26,7 +29,6 @@ function chargerInterets() {
             tableBody.appendChild(row);
         });
         
-        // Calculate and display total
         const total = response.reduce((sum, interet) => sum + parseFloat(interet.interet), 0);
         const totalRow = document.createElement('tr');
         totalRow.style.fontWeight = 'bold';
@@ -36,6 +38,8 @@ function chargerInterets() {
             <td><strong>${total.toFixed(2)} Ar</strong></td>
         `;
         tableBody.appendChild(totalRow);
+        
+        updateChart(response);
     });
 }
 
@@ -61,6 +65,7 @@ function chargerInteretsParPeriode(moisDebut, anneeDebut, moisFin, anneeFin) {
             const row = document.createElement('tr');
             row.innerHTML = '<td colspan="3" style="text-align: center;">Aucun intérêt trouvé pour cette période</td>';
             tableBody.appendChild(row);
+            updateChart([]);
             return;
         }
         
@@ -74,7 +79,6 @@ function chargerInteretsParPeriode(moisDebut, anneeDebut, moisFin, anneeFin) {
             tableBody.appendChild(row);
         });
         
-        // Calculate and display total for the period
         const total = response.reduce((sum, interet) => sum + parseFloat(interet.interet), 0);
         const totalRow = document.createElement('tr');
         totalRow.style.fontWeight = 'bold';
@@ -84,15 +88,77 @@ function chargerInteretsParPeriode(moisDebut, anneeDebut, moisFin, anneeFin) {
             <td><strong>${total.toFixed(2)} Ar</strong></td>
         `;
         tableBody.appendChild(totalRow);
-        const periodeTitle = `Intérêts de ${moisDebut}/${anneeDebut} à ${moisFin}/${anneeFin}`;
+        
+        updateChart(response);
     });
 }
 
-// Fonction d'initialisation appelée quand la section intérêts est chargée
+function updateChart(data) {
+    const ctx = document.getElementById('interestChart').getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (interestChart) {
+        interestChart.destroy();
+    }
+    
+    // Prepare chart data
+    const labels = data.map(item => `${item.mois}/${item.annee}`);
+    const values = data.map(item => parseFloat(item.interet));
+    
+    // Create new chart
+    interestChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Intérêts Gagnés (Ar)',
+                data: values,
+                borderColor: '#3498db',
+                backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 5,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Montant (Ar)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Période (Mois/Année)'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.parsed.y.toFixed(2)} Ar`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
 function onInteretSectionLoaded() {
     console.log('Section intérêts chargée, initialisation...');
     initialiserPageInteret();
-    // Charger les données par défaut
     chargerInterets();
 }
 
