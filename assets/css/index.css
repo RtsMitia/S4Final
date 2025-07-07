@@ -226,6 +226,46 @@
       width: auto;
     }
     
+    /* Styles pour les boutons dans les tableaux */
+    .btn-modifier {
+      background-color: #f39c12 !important;
+      color: white !important;
+      border: none !important;
+      padding: 6px 12px !important;
+      border-radius: 4px !important;
+      cursor: pointer !important;
+      font-size: 12px !important;
+      min-width: auto !important;
+      width: auto !important;
+    }
+    
+    .btn-modifier:hover {
+      background-color: #e67e22 !important;
+    }
+    
+    .btn-supprimer {
+      background-color: #e74c3c !important;
+      color: white !important;
+      border: none !important;
+      padding: 6px 12px !important;
+      border-radius: 4px !important;
+      cursor: pointer !important;
+      font-size: 12px !important;
+      min-width: auto !important;
+      width: auto !important;
+    }
+    
+    .btn-supprimer:hover {
+      background-color: #c0392b !important;
+    }
+    
+    /* Conteneur pour les boutons d'action dans les tableaux */
+    td .action-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    
     /* Welcome Content */
     .welcome-content {
       text-align: center;
