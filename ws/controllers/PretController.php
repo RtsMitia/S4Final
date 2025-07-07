@@ -6,7 +6,7 @@ require_once __DIR__ . '/../models/TypePret.php';
 
 
 class PretController {
-    public static function insertionPret(){
+    public static function insertionPret($id){
         $data = Flight::request()->data;
         $solde = Pret::getSoldeEf($data->id_ef);
         $montantPret = $data->montant;

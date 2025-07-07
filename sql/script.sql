@@ -47,7 +47,7 @@ CREATE TABLE s4_final_pret(
 );
 
 CREATE TABLE s4_final_statut(
-   id INT,
+   id INT AUTO_INCREMENT,
    libelle VARCHAR(50),
    PRIMARY KEY(id)
 );

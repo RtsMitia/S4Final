@@ -33,16 +33,30 @@ class Pret {
         return $stmt->execute([$id_pret, $idStatut, $date]);
     }
 
-    public static function getSoldeEf($id_ef){
+    public static function getSoldeEf($id_ef) {
         $db = getDB();
-        $sql= "SELECT SUM(CASE WHEN f.type = 'entree' THEN t.quantite * t.prix_unitaire ELSE 0 END) AS total_entree,
-                        SUM(CASE WHEN f.type = 'sortie' THEN t.quantite * t.prix_unitaire ELSE 0 END) AS total_sortie
-                        FROM s4_final_mouvement_fond f WHERE id_ef=?";
+        
+        $sql = "
+            SELECT 
+                SUM(CASE WHEN type = 'entree' THEN montant ELSE 0 END) AS total_entree,
+                SUM(CASE WHEN type = 'sortie' THEN montant ELSE 0 END) AS total_sortie
+            FROM s4_final_mouvement_fond
+            WHERE id_ef = ?
+        ";
+        
         $stmt = $db->prepare($sql);
         $stmt->execute([$id_ef]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC); 
-        $solde = $result['total_entree'] - $result['total_sortie'];
-        return $solde;
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$result) {
+            return 0; 
+        }
+
+        $total_entree = $result['total_entree'] ?? 0;
+        $total_sortie = $result['total_sortie'] ?? 0;
+
+        return $total_entree - $total_sortie;
     }
+
 }
 ?>

@@ -61,9 +61,17 @@ function afficherPretsClient(prets) {
 }
 
 function fairePret() {
-    if (!clientActuel) {
-        alert('Aucun client sélectionné');
-        return;
-    }
+    const idText = document.getElementById('client-id-display').textContent.trim(); // "Id: 3"
+    const idClient = idText.split(':')[1].trim(); // "3"
+
+  const nom = document.getElementById('client-nom').textContent.trim();
+  const prenom = document.getElementById('client-prenom').textContent.trim();
+
+  localStorage.setItem('pretClientId', idClient);
+  localStorage.setItem('pretClientNom', nom);
+  localStorage.setItem('pretClientPrenom', prenom);
+
+  showSectionWithInclude('insert-pret');
 }
+
 
