@@ -1,7 +1,7 @@
 <?php
 function getDB() {
     $host = 'localhost';
-    $dbname = 'tp_flight';
+    $dbname = 's4final';
     $username = 'root';
     $password = '';
 

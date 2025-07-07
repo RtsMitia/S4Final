@@ -50,6 +50,8 @@ CREATE TABLE s4_final_statut(
    PRIMARY KEY(id)
 );
 
+INSERT INTO s4_final_statut (libelle) VALUES('en attente', 'valide', 'refus');
+
 CREATE TABLE s4_final_compte(
    id INT AUTO_INCREMENT,
    solde DECIMAL(15,2),
@@ -61,6 +63,8 @@ CREATE TABLE s4_final_compte(
 CREATE TABLE s4_final_mouvement_compte(
    id INT AUTO_INCREMENT,
    type ENUM('entree', 'sortie'),
+   montant DECIMAL(15,2),
+   motif VARCHAR(100),
    date_transaction DATETIME,
    id_compte INT NOT NULL,
    PRIMARY KEY(id),
