@@ -2,121 +2,128 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Gestion des étudiants</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; }
-    input, button { margin: 5px; padding: 5px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background-color: #f2f2f2; }
-  </style>
+  <title>Gestion Scolaire</title>
+  <link rel="stylesheet" href="assets/css/index.css">
 </head>
 <body>
 
-  <h1>Gestion des étudiants</h1>
+  <div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2> Gestion Financiere</h2>
+      <ul>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" onclick="toggleDropdown(this)">
+             Etablissement Financiere
+            <span class="dropdown-arrow">▼</span>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" onclick="showSection('ajouter-fond-depart')">💰 Ajouter Fond Depart</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
 
-  <div>
-    <input type="hidden" id="id">
-    <input type="text" id="nom" placeholder="Nom">
-    <input type="text" id="prenom" placeholder="Prénom">
-    <input type="email" id="email" placeholder="Email">
-    <input type="number" id="age" placeholder="Âge">
-    <button onclick="ajouterOuModifier()">Ajouter / Modifier</button>
+    <!-- Main Content -->
+    <main class="main-content">
+      
+      <!-- Welcome Section -->
+      <section id="section-welcome" class="content-section active">
+        <div class="welcome-content">
+          <h2>Bienvenue dans le Système de Gestion</h2>
+          <p>Sélectionnez une option dans le menu de gauche pour commencer.</p>
+        </div>
+      </section>
+
+      <!-- Section Ajouter Fond Depart -->
+      <section id="section-ajouter-fond-depart" class="content-section">
+        <h1>Ajouter Fond de Départ</h1>
+        
+        <div class="form-container">
+          <div class="form-row">
+            <input type="hidden" id="ef-id">
+            <div class="form-group">
+              <input type="text" id="ef-nom" placeholder="Nom de l'établissement">
+            </div>
+            <div class="form-group">
+              <input type="number" id="ef-fond-depart" placeholder="Fond de départ" step="0.01">
+            </div>
+            <div class="form-group">
+              <button onclick="ajouterEf()">Ajouter Établissement</button>
+            </div>
+          </div>
+        </div>
+
+        <table id="table-ef">
+          <thead>
+            <tr>
+              <th>ID</th><th>Nom</th><th>Fond de Départ</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+    </main>
   </div>
-
-  <table id="table-etudiants">
-    <thead>
-      <tr>
-        <th>ID</th><th>Nom</th><th>Prénom</th><th>Email</th><th>Âge</th><th>Actions</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
 
   <script>
     const apiBase = "http://localhost/ProjetFinalS4/ws";
 
+    // Navigation and dropdown functions
+    function showSection(sectionName) {
+      // Hide all sections
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      // Show selected section
+      document.getElementById(`section-${sectionName}`).classList.add('active');
+      
+      // Load data for the selected section
+      if (sectionName === 'ajouter-fond-depart') {
+        chargerEtablissements();
+      }
+    }
+
+    function toggleDropdown(element) {
+      const dropdown = element.parentElement;
+      dropdown.classList.toggle('open');
+    }
+
     function ajax(method, url, data, callback) {
       const xhr = new XMLHttpRequest();
-      xhr.open(method, apiBase + url, true);
+      const fullUrl = apiBase + url;
+      console.log('Making request to:', fullUrl);
+      
+      xhr.open(method, fullUrl, true);
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          callback(JSON.parse(xhr.responseText));
+        if (xhr.readyState === 4) {
+          console.log('Response status:', xhr.status);
+          console.log('Response text:', xhr.responseText);
+          
+          if (xhr.status === 200) {
+            callback(JSON.parse(xhr.responseText));
+          } else {
+            console.error('Error:', xhr.status, xhr.statusText);
+            alert(`Erreur ${xhr.status}: ${xhr.statusText}\nURL: ${fullUrl}`);
+          }
         }
       };
       xhr.send(data);
     }
 
-    function chargerEtudiants() {
-      ajax("GET", "/etudiants", null, (data) => {
-        const tbody = document.querySelector("#table-etudiants tbody");
-        tbody.innerHTML = "";
-        data.forEach(e => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${e.id}</td>
-            <td>${e.nom}</td>
-            <td>${e.prenom}</td>
-            <td>${e.email}</td>
-            <td>${e.age}</td>
-            <td>
-              <button onclick='remplirFormulaire(${JSON.stringify(e)})'>✏️</button>
-              <button onclick='supprimerEtudiant(${e.id})'>🗑️</button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-      });
-    }
-
-    function ajouterOuModifier() {
-      const id = document.getElementById("id").value;
-      const nom = document.getElementById("nom").value;
-      const prenom = document.getElementById("prenom").value;
-      const email = document.getElementById("email").value;
-      const age = document.getElementById("age").value;
-
-      const data = `nom=${encodeURIComponent(nom)}&prenom=${encodeURIComponent(prenom)}&email=${encodeURIComponent(email)}&age=${age}`;
-
-      if (id) {
-        ajax("PUT", `/etudiants/${id}`, data, () => {
-          resetForm();
-          chargerEtudiants();
-        });
-      } else {
-        ajax("POST", "/etudiants", data, () => {
-          resetForm();
-          chargerEtudiants();
+    // =============== GESTION DES ÉTABLISSEMENTS FINANCIERS ===============
+  
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!event.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown.open').forEach(dropdown => {
+          dropdown.classList.remove('open');
         });
       }
-    }
-
-    function remplirFormulaire(e) {
-      document.getElementById("id").value = e.id;
-      document.getElementById("nom").value = e.nom;
-      document.getElementById("prenom").value = e.prenom;
-      document.getElementById("email").value = e.email;
-      document.getElementById("age").value = e.age;
-    }
-
-    function supprimerEtudiant(id) {
-      if (confirm("Supprimer cet étudiant ?")) {
-        ajax("DELETE", `/etudiants/${id}`, null, () => {
-          chargerEtudiants();
-        });
-      }
-    }
-
-    function resetForm() {
-      document.getElementById("id").value = "";
-      document.getElementById("nom").value = "";
-      document.getElementById("prenom").value = "";
-      document.getElementById("email").value = "";
-      document.getElementById("age").value = "";
-    }
-
-    chargerEtudiants();
+    });
   </script>
 
 </body>
