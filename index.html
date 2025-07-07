@@ -2,16 +2,25 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Gestion Scolaire</title>
+  <title>Gestion Financière</title>
   <link rel="stylesheet" href="assets/css/index.css">
 </head>
 <body>
 
   <div class="container">
+
     <!-- Sidebar -->
     <nav class="sidebar">
-      <h2> Gestion Financiere</h2>
+      <h2>Gestion Financière</h2>
+      
+      <div class="sidebar-search">
+        <input type="text" id="sidebar-search-client" placeholder="🔍 Rechercher un client..." 
+        class="sidebar-search-input" onkeyup="rechercherClient()">
+        <div id="sidebar-search-results" class="sidebar-search-results"></div>
+      </div>
+      
       <ul>
+
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" onclick="toggleDropdown(this)">
              Etablissement Financiere
@@ -19,6 +28,7 @@
           </a>
           <div class="dropdown-menu">
             <a href="#" onclick="showSectionWithInclude('ajouter-fond-depart')"> Ajouter Fond Depart</a>
+            <a href="#" onclick="showSectionWithInclude('interet')"> Interet </a>
           </div>
         </li>
         <li class="dropdown">
@@ -27,7 +37,16 @@
             <span class="dropdown-arrow">▼</span>
           </a>
           <div class="dropdown-menu">
-            <a href="#" onclick="showSectionWithInclude('type-pret')">📋 Gestion Types de Prêt</a>
+            <a href="#" onclick="showSectionWithInclude('type-pret')"> Gestion Types de Prêt</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" onclick="toggleDropdown(this)">
+             Gestion de prêts
+            <span class="dropdown-arrow">▼</span>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" onclick="showSectionWithInclude('insert-pret')"> Ajouter Prêt</a>
           </div>
         </li>
       </ul>
@@ -46,10 +65,9 @@
 
     </main>
   </div>
-
-  <!-- Scripts -->
-<script src="assets/js/section-loader.js"></script>
-<script src="assets/js/script.js"></script>
+  <script src="assets/js/section-loader.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script src="assets/js/client.js"></script>
 
 </body>
 </html>
