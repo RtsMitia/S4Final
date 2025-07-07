@@ -28,42 +28,28 @@ class EfController {
         }
     }
     
-    public static function showAddFondDepartPage() {
-        Flight::view()->path = __DIR__ . '/../..';
-        
-        Flight::render('add_fond_depart', [
-            'title' => 'Ajouter Fond de Départ',
-            'message' => 'Ajoutez un nouvel établissement financier'
-        ]);
-    }
-    
-    public static function createAndShowSuccess() {
+    public static function updateFondDepart ($id) {
         $data = Flight::request()->data;
-        
+
+        if (!isset($data->fondDepart)) {
+            Flight::json(['error' => 'fondDepart manquant'], 400);
+            return;
+        }
+
         try {
-            $efId = Ef::create($data);
-            
-            // Set the view path to root folder (same level as index.html)
-            Flight::view()->path = __DIR__ . '/../..';
-            
-            // Render success page with data
-            Flight::render('success', [
-                'title' => 'Succès',
-                'message' => 'Établissement financier ajouté avec succès!',
-                'ef_id' => $efId,
-                'fond_depart' => $data->fondDepart,
-                'redirect_url' => '/ProjetFinalS4/index.html'
-            ]);
-            
+            $updated = Ef::updateFondDepart($id, $data->fondDepart);
+            if ($updated) {
+                Flight::json(['message' => 'Fond de départ mis à jour', 'id' => $id, 'fond_depart' => $data->fondDepart]);
+            } else {
+                Flight::json(['error' => 'Aucun établissement trouvé ou aucune modification effectuée'], 404);
+            }
         } catch (Exception $e) {
-            // Render error page
-            Flight::view()->path = __DIR__ . '/../..';
-            Flight::render('error', [
-                'title' => 'Erreur',
-                'message' => 'Erreur lors de la création: ' . $e->getMessage(),
-                'back_url' => '/ProjetFinalS4/index.html'
-            ]);
+            // Check if it's a business logic error (fund already exists)
+            if (strpos($e->getMessage(), "déjà un fond de départ") !== false) {
+                Flight::json(['error' => $e->getMessage()], 400);
+            } else {
+                Flight::json(['error' => 'Erreur lors de la mise à jour: ' . $e->getMessage()], 500);
+            }
         }
     }
-
 }

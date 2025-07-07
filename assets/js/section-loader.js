@@ -70,10 +70,7 @@ async function showSectionWithInclude(sectionName) {
   if (sectionName === 'type-pret') {
     chargerTypesPret();
   }
-//   else if (sectionName === 'ajouter-fond-depart') {
-//     // Pour les sections existantes
-//     if (typeof chargerEtablissements === 'function') {
-//       chargerEtablissements();
-//     }
-//   }
+  else if (sectionName === 'ajouter-fond-depart') {
+      chargerEtablissements();
+  }
 }
