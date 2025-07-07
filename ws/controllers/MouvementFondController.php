@@ -1,8 +1,7 @@
 <?php
-require_once __DIR__ . '/../models/Etudiant.php';
-require_once __DIR__ . '/../helpers/Utils.php';
+require_once __DIR__ . '/../models/MouvementFond.php';
 
-class EtudiantController {
+class MouvementFondController {
     public static function getAll() {
         $etudiants = Etudiant::getAll();
         Flight::json($etudiants);
