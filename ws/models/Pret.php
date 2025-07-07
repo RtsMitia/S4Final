@@ -2,10 +2,10 @@
 require_once __DIR__ . '/../db.php';
 
 class Pret {
-    public static function insertPret($montant, $date_pret, $id_client, $id_type_pret) {
+    public static function insertPret($data) {
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO s4_final_pret (montant, date_pret, id_client, id_type_pret) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$montant, $date_pret, $id_client, $id_type_pret]);
+        $stmt->execute([$data->montant, $data->date_pret, $data->id_client, $data->id_type_pret]);
         return $db->lastInsertId();
     }
 
@@ -27,13 +27,13 @@ class Pret {
         return $stmt->execute([$motif, $date, $montant, $id_compte]);
     }
 
-    public function insertStatutPret($id_pret, $date, $idStatut) {
+    public static function insertStatutPret($id_pret, $date, $idStatut) {
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO s4_final_statut_pret (id_pret, id_statut, date_statut) VALUES (?, ?, ?)");
         return $stmt->execute([$id_pret, $idStatut, $date]);
     }
 
-    public function getSoldeEf($id_ef){
+    public static function getSoldeEf($id_ef){
         $db = getDB();
         $sql= "SELECT SUM(CASE WHEN f.type = 'entree' THEN t.quantite * t.prix_unitaire ELSE 0 END) AS total_entree,
                         SUM(CASE WHEN f.type = 'sortie' THEN t.quantite * t.prix_unitaire ELSE 0 END) AS total_sortie

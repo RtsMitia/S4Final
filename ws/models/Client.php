@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../db.php';
 
-class ClientModel {
+class Client {
     public static function getClient($id) {
         $db = getDB();
         $stmt = $db->prepare("SELECT * FROM s4_final_client WHERE id = ?");
