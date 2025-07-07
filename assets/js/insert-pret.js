@@ -44,6 +44,7 @@ function ajouterPret() {
     const montant = document.querySelector('#montant-pret').value;
     const datePret = document.querySelector('#date-pret').value;
     const idEf = document.querySelector('#etablissement-select').value;
+    const duree = document.querySelector('#duree').value;
 
     if (!idClient || !idTypePret || !montant || !datePret || !idEf) {
         alert('Tous les champs ne sont pas remplis');
@@ -55,7 +56,8 @@ function ajouterPret() {
         id_type_pret: parseInt(idTypePret),
         montant: parseFloat(montant),
         date_pret: datePret,
-        id_ef: parseInt(idEf)
+        id_ef: parseInt(idEf),
+        duree: parseFloat(duree)
     };
 
     const xhr = new XMLHttpRequest();
@@ -75,6 +77,7 @@ function ajouterPret() {
                         document.querySelector('#montant-pret').value = '';
                         document.querySelector('#date-pret').value = '';
                         document.querySelector('#type-pret-select').value = '';
+                        document.querySelector('#duree-pret').value = '';
 
                         // Nettoyage localStorage (optionnel)
                         localStorage.removeItem('pretClientId');
@@ -95,9 +98,3 @@ function ajouterPret() {
     xhr.send(JSON.stringify(data));
 }
 
-// Appeler au chargement de la page
-// document.addEventListener('DOMContentLoaded', () => {
-//     chargerTypesPret();
-//     chargerEtablissements();
-//     afficherClientDepuisLocalStorage();
-// });

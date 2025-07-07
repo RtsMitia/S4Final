@@ -69,5 +69,41 @@ class Client {
         $stmt = $db->prepare("DELETE FROM s4_final_client WHERE id = ?");
         $stmt->execute([$id]);
     }
+
+    public static function getPretsByClientId($id) {
+        $db = getDB();
+        $sql = "SELECT sp.id as pret_id, sp.montant, sp.date_pret, sp.duree,
+                stp.nom as nom_type_pret, stp.taux, stp.assurance, 
+                sc.nom as nom_client, sc.prenom as prenom_client, sc.mail as mail_client,
+                COALESCE(s.libelle, 'En attente') as statut_libelle,
+                ssp.date_statut
+                FROM s4_final_pret sp 
+                JOIN s4_final_type_pret stp ON sp.id_type_pret = stp.id
+                JOIN s4_final_client sc ON sp.id_client = sc.id
+                LEFT JOIN (
+                    SELECT id_pret, id_statut, date_statut,
+                           ROW_NUMBER() OVER (PARTITION BY id_pret ORDER BY date_statut DESC) as rn
+                    FROM s4_final_statut_pret
+                ) ssp ON sp.id = ssp.id_pret AND ssp.rn = 1
+                LEFT JOIN s4_final_statut s ON ssp.id_statut = s.id
+                WHERE sp.id_client = ?
+                ORDER BY sp.date_pret DESC
+        ";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getStatutsPret($pretId) {
+        $db = getDB();
+        $sql = "SELECT ssp.*, s.libelle as statut_libelle 
+                FROM s4_final_statut_pret ssp
+                JOIN s4_final_statut s ON ssp.id_statut = s.id
+                WHERE ssp.id_pret = ?
+                ORDER BY ssp.date_statut DESC";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$pretId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

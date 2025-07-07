@@ -101,4 +101,24 @@ class ClientController {
             Flight::json(['error' => 'Erreur lors de la suppression: ' . $e->getMessage()], 500);
         }
     }
+
+    public static function getPretsByClientId($id) {
+        try {
+            $prets = Client::getPretsByClientId($id);
+            Flight::json($prets);
+        } catch (Exception $e) {
+            error_log('Erreur getPretsByClientId: ' . $e->getMessage());
+            Flight::json(['error' => 'Erreur lors de la récupération des prêts du client'], 500);
+        }
+    }
+
+    public static function getStatutsPret($pretId) {
+        try {
+            $statuts = Client::getStatutsPret($pretId);
+            Flight::json($statuts);
+        } catch (Exception $e) {
+            error_log('Erreur getStatutsPret: ' . $e->getMessage());
+            Flight::json(['error' => 'Erreur lors de la récupération des statuts du prêt'], 500);
+        }
+    }
 }
