@@ -50,7 +50,10 @@ CREATE TABLE s4_final_statut(
    PRIMARY KEY(id)
 );
 
-INSERT INTO s4_final_statut (libelle) VALUES('en attente', 'valide', 'refus');
+INSERT INTO s4_final_statut (libelle) VALUES
+('en attente'),
+('valide'),
+('refus');
 
 CREATE TABLE s4_final_compte(
    id INT AUTO_INCREMENT,
@@ -83,10 +86,21 @@ CREATE TABLE s4_final_ef_utilisateurs(
 );
 
 CREATE TABLE s4_final_statut_pret(
+   id INT AUTO_INCREMENT PRIMARY KEY,
    id_pret INT,
    id_statut INT,
    date_statut DATETIME,
-   PRIMARY KEY(id_pret, id_statut),
    FOREIGN KEY(id_pret) REFERENCES s4_final_pret(id),
    FOREIGN KEY(id_statut) REFERENCES s4_final_statut(id)
+);
+
+CREATE TABLE s4_final_remboursement (
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   id_pret INT NOT NULL,
+   montant_total DECIMAL(15,2),
+   interet DECIMAL(15,2),
+   capital DECIMAL(15,2),
+   int mois, 
+   int annee,
+   FOREIGN KEY(id_pret) REFERENCES s4_final_pret(id)
 );
