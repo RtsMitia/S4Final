@@ -73,4 +73,9 @@ async function showSectionWithInclude(sectionName) {
   else if (sectionName === 'ajouter-fond-depart') {
       chargerEtablissements();
   }
+    else if (sectionName === 'insert-pret') {
+    chargerTypesPret();
+    chargerClients();
+    // document.getElementById('etablissement-select').value = ... (si besoin)
+  }
 }
