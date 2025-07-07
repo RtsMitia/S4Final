@@ -22,11 +22,29 @@
       <ul>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" onclick="toggleDropdown(this)">
+             Etablissement Financiere
+            <span class="dropdown-arrow">▼</span>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" onclick="showSectionWithInclude('ajouter-fond-depart')"> Ajouter Fond Depart</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" onclick="toggleDropdown(this)">
              Types de Prêt
             <span class="dropdown-arrow">▼</span>
           </a>
           <div class="dropdown-menu">
             <a href="#" onclick="showSectionWithInclude('type-pret')">📋 Gestion Types de Prêt</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" onclick="toggleDropdown(this)">
+             📋 Gestion de prêts
+            <span class="dropdown-arrow">▼</span>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" onclick="showSectionWithInclude('insert-pret')">📋 Ajouter Prêt</a>
           </div>
         </li>
       </ul>
@@ -45,7 +63,6 @@
 
     </main>
   </div>
-
   <script src="assets/js/section-loader.js"></script>
   <script src="assets/js/script.js"></script>
   <script src="assets/js/client.js"></script>

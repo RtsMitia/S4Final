@@ -72,3 +72,13 @@ document.addEventListener('click', function(event) {
     });
   }
 });
+  // =============== GESTION DES ÉTABLISSEMENTS FINANCIERS ===============
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', function(event) {
+    if (!event.target.closest('.dropdown')) {
+      document.querySelectorAll('.dropdown.open').forEach(dropdown => {
+        dropdown.classList.remove('open');
+      });
+    }
+  });

@@ -52,5 +52,12 @@ async function showSectionWithInclude(sectionName) {
   if (sectionName === 'type-pret') {
     chargerTypesPret();
   }
-
+  else if (sectionName === 'ajouter-fond-depart') {
+      chargerEtablissements();
+  }
+    else if (sectionName === 'insert-pret') {
+    chargerTypesPret();
+    chargerClients();
+    // document.getElementById('etablissement-select').value = ... (si besoin)
+  }
 }

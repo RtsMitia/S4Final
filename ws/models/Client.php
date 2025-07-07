@@ -2,7 +2,6 @@
 require_once __DIR__ . '/../db.php';
 
 class Client {
-
     public static function getAll() {
         $db = getDB();
         $stmt = $db->query("SELECT * FROM s4_final_client");
@@ -16,6 +15,18 @@ class Client {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public static function getAllClients() {
+        $db = getDB();
+        $stmt = $db->query("SELECT id, nom, prenom FROM s4_final_client");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getCompteClient($id_client) {
+        $db = getDB();
+        $stmt = $db->prepare("SELECT id, solde FROM s4_final_compte WHERE id_client = ?");
+        $stmt->execute([$id_client]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     public static function search($searchTerm) {
         $db = getDB(); 
         $sql = "SELECT * FROM s4_final_client 
@@ -59,3 +70,4 @@ class Client {
         $stmt->execute([$id]);
     }
 }
+?>
