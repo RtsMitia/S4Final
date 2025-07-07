@@ -19,9 +19,10 @@ function chargerTypesPret() {
         <td>${type.id || 'N/A'}</td>
         <td>${type.nom || 'N/A'}</td>
         <td>${type.taux || 'N/A'}%</td>
+        <td>${type.assurance || 'N/A'}%</td>
         <td>
           <div class="action-buttons">
-            <button class="btn-modifier" data-id="${type.id || ''}" data-nom="${type.nom || ''}" data-taux="${type.taux || ''}">Modifier</button>
+            <button class="btn-modifier" data-id="${type.id || ''}" data-nom="${type.nom || ''}" data-taux="${type.taux || ''}" data-assurance="${type.assurance || ''}">Modifier</button>
             <button class="btn-supprimer" data-id="${type.id || ''}">Supprimer</button>
           </div>
         </td>
