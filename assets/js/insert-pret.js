@@ -44,7 +44,6 @@ function ajouterPret() {
     const idTypePret = document.querySelector('#typepret-select').value;
     const montant = document.querySelector('#montant-pret').value;
     const datePret = document.querySelector('#date-pret').value;
-    const assurance = document.querySelector('#assurance').value;
     const idEf = document.querySelector('#etablissement-id').value;
 
     if (!idClient || !idTypePret || !montant || !datePret || !assurance) {
@@ -76,7 +75,6 @@ function ajouterPret() {
                     if (response.message) {
                         alert(response.message);
                         document.querySelector('#montant-pret').value = '';
-                        document.querySelector('#assurance').value = '';
                         document.querySelector('#date-pret').value = '';
                         document.querySelector('#typepret-select').value = '';
                         document.querySelector('#client-select').value = '';

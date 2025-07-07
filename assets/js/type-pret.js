@@ -39,13 +39,15 @@ function attachEventListeners() {
       const id = this.getAttribute('data-id');
       const nom = this.getAttribute('data-nom');
       const taux = this.getAttribute('data-taux');
+      const assurance = this.getAttribute('data-assurance');
       
       console.log('Données récupérées des attributs:'); // Debug
       console.log('ID:', id, 'Type:', typeof id);
       console.log('Nom:', nom, 'Type:', typeof nom);
       console.log('Taux:', taux, 'Type:', typeof taux);
+      console.log('Assurance:', assurance, 'Type:', typeof assurance);
       
-      modifierTypePret(id, nom, taux);
+      modifierTypePret(id, nom, taux, assurance);
     });
   });
   
@@ -61,12 +63,13 @@ function ajouterTypePret() {
   const id = document.getElementById('type-pret-id').value;
   const nom = document.getElementById('nom-type-pret').value;
   const taux = document.getElementById('taux-type-pret').value;
+  const assurance = document.getElementById('assurance-type-pret').value;
   
-  if (!nom || !taux) {
+  if (!nom || !taux || !assurance) {
     return;
   }
   
-  const data = `nom=${encodeURIComponent(nom)}&taux=${encodeURIComponent(taux)}`;
+  const data = `nom=${encodeURIComponent(nom)}&taux=${encodeURIComponent(taux)}&assurance=${encodeURIComponent(assurance)}`;
   
   if (id) {
     ajax('PUT', `/type-prets/${id}`, data, (response) => {
@@ -81,12 +84,13 @@ function ajouterTypePret() {
   }
 }
 
-function modifierTypePret(id, nom, taux) {
-  console.log('Modification - ID:', id, 'Nom:', nom, 'Taux:', taux); // Debug
+function modifierTypePret(id, nom, taux, assurance) {
+  console.log('Modification - ID:', id, 'Nom:', nom, 'Taux:', taux, 'assurance:', assurance); // Debug
   
   document.getElementById('type-pret-id').value = id;
   document.getElementById('nom-type-pret').value = nom;
   document.getElementById('taux-type-pret').value = taux;
+  document.getElementById('assurance-type-pret').value = assurance;
   
   const submitBtn = document.querySelector('.form-container button');
   const cancelBtn = document.getElementById('btn-annuler');
@@ -115,6 +119,7 @@ function clearTypePretForm() {
   document.getElementById('type-pret-id').value = '';
   document.getElementById('nom-type-pret').value = '';
   document.getElementById('taux-type-pret').value = '';
+  document.getElementById('assurance-type-pret').value = '';
   
   const submitBtn = document.querySelector('.form-container button');
   const cancelBtn = document.getElementById('btn-annuler');

@@ -4,8 +4,8 @@ require_once __DIR__ . '/../db.php';
 class Pret {
     public static function insertPret($data) {
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO s4_final_pret (montant, date_pret, id_client, assurance, id_type_pret) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$data->montant, $data->date_pret, $data->id_client, $data->id_type_pret, $data->assurance]);
+        $stmt = $db->prepare("INSERT INTO s4_final_pret (montant, date_pret, id_client, id_type_pret) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$data->montant, $data->date_pret, $data->id_client, $data->id_type_pret]);
         return $db->lastInsertId();
     }
 
