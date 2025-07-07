@@ -3,7 +3,7 @@
 async function loadSection(sectionName) {
   try {
     // Charger le HTML de la section
-    const response = await fetch(`sections/${sectionName}.html`);
+    const response = await fetch(`${sectionName}.html`);
     if (!response.ok) {
       throw new Error(`Erreur lors du chargement de la section: ${response.status}`);
     }
