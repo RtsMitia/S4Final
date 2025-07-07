@@ -12,13 +12,22 @@
     <nav class="sidebar">
       <h2> Gestion Financiere</h2>
       <ul>
-        <li class="dropdown">
+        <!-- <li class="dropdown">
           <a href="#" class="dropdown-toggle" onclick="toggleDropdown(this)">
              Etablissement Financiere
             <span class="dropdown-arrow">▼</span>
           </a>
           <div class="dropdown-menu">
             <a href="#" onclick="showSection('ajouter-fond-depart')">💰 Ajouter Fond Depart</a>
+          </div>
+        </li> -->
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" onclick="toggleDropdown(this)">
+             Types de Prêt
+            <span class="dropdown-arrow">▼</span>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" onclick="showSectionWithInclude('type-pret')">📋 Gestion Types de Prêt</a>
           </div>
         </li>
       </ul>
@@ -36,7 +45,7 @@
       </section>
 
       <!-- Section Ajouter Fond Depart -->
-      <section id="section-ajouter-fond-depart" class="content-section">
+      <!-- <section id="section-ajouter-fond-depart" class="content-section">
         <h1>Ajouter Fond de Départ</h1>
         
         <div class="form-container">
@@ -62,11 +71,13 @@
           </thead>
           <tbody></tbody>
         </table>
-      </section>
+      </section> -->
 
     </main>
   </div>
 
+  <!-- Scripts -->
+  <script src="assets/js/section-loader.js"></script>
   <script>
     const apiBase = "http://localhost/ProjetFinalS4/ws";
 

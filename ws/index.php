@@ -2,6 +2,7 @@
 require 'vendor/autoload.php';
 require 'db.php';
 require 'routes/etudiant_routes.php';
+require 'routes/type_pret_routes.php';
 
 
 // Headers CORS pour permettre les requêtes depuis le navigateur

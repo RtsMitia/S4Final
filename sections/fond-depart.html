@@ -1,0 +1,28 @@
+<!-- Section Ajouter Fond Depart -->
+<section id="section-fond-depart" class="content-section">
+  <h1>Ajouter Fond de Départ</h1>
+  
+  <div class="form-container">
+    <div class="form-row">
+      <input type="hidden" id="ef-id">
+      <div class="form-group">
+        <input type="text" id="ef-nom" placeholder="Nom de l'établissement">
+      </div>
+      <div class="form-group">
+        <input type="number" id="ef-fond-depart" placeholder="Fond de départ" step="0.01">
+      </div>
+      <div class="form-group">
+        <button onclick="ajouterEf()">Ajouter Établissement</button>
+      </div>
+    </div>
+  </div>
+
+  <table id="table-ef">
+    <thead>
+      <tr>
+        <th>ID</th><th>Nom</th><th>Fond de Départ</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
