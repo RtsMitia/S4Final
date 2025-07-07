@@ -109,3 +109,15 @@ INSERT INTO s4_final_statut_pret (id_pret, id_statut, date_statut) VALUES
 INSERT INTO s4_final_ef_utilisateurs (nom, prenom, mail, mdp, id_ef) VALUES 
 ('Admin', 'System', 'admin@banque.mg', 'password123', 1),
 ('Manager', 'Credit', 'credit@banque.mg', 'manager456', 1);
+INSERT INTO s4_final_type_pret (nom, taux, assurance) VALUES
+('Prêt personnel', 8, 2),
+('Crédit immobilier', 5, 3),
+('Prêt étudiant', 3, 4),
+('Crédit auto', 6, 5);
+
+INSERT INTO s4_final_client (nom, prenom, mail) VALUES
+('Rasolo', 'Hery', 'hery.rasolo@example.com'),
+('Rakoto', 'Miora', 'miora.rakoto@example.com'),
+('Andrianina', 'Feno', 'feno.andrianina@example.com'),
+('Rasoanaivo', 'Soa', 'soa.rasoanaivo@example.com');
+

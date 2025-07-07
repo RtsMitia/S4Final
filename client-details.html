@@ -1,0 +1,44 @@
+<section id="section-client-details" class="content-section">
+  <div class="section-header">
+    <h2>Détails du Client</h2>
+  </div>
+
+  <div class="client-details-container">
+    <div class="client-info-card">
+      <div class="client-header">
+        <h3 id="client-nom-complet">Chargement...</h3>
+        <span class="client-id" id="client-id-display"></span>
+      </div>
+      
+      <div class="client-details-grid">
+        <div class="client-field">
+          <label>Nom :</label>
+          <span id="client-nom">-</span>
+        </div>
+        
+        <div class="client-field">
+          <label>Prénom :</label>
+          <span id="client-prenom">-</span>
+        </div>
+        
+        <div class="client-field">
+          <label>Email :</label>
+          <span id="client-mail">-</span>
+        </div>
+      </div>
+      
+      <div class="client-actions">
+        <button class="btn btn-primary" onclick="fairePret()">
+          💰 Faire un Prêt
+        </button>
+      </div>
+    </div>
+    
+    <div class="client-prets-section">
+      <h4>Historique des Prêts</h4>
+      <div id="client-prets-list">
+        <p class="loading">Chargement des prêts...</p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -22,6 +22,7 @@ CREATE TABLE s4_final_type_pret(
    id INT AUTO_INCREMENT,
    nom VARCHAR(100),
    taux DECIMAL(15,2),
+   assurance DECIMAL(15,2),
    PRIMARY KEY(id)
 );
 
@@ -40,7 +41,6 @@ CREATE TABLE s4_final_pret(
    id_client INT NOT NULL,
    id_type_pret INT NOT NULL,
    duree INT NOT NULL,
-   assurance FLOAT,
    PRIMARY KEY(id),
    FOREIGN KEY(id_client) REFERENCES s4_final_client(id),
    FOREIGN KEY(id_type_pret) REFERENCES s4_final_type_pret(id)
@@ -95,6 +95,7 @@ CREATE TABLE s4_final_statut_pret(
    FOREIGN KEY(id_pret) REFERENCES s4_final_pret(id),
    FOREIGN KEY(id_statut) REFERENCES s4_final_statut(id)
 );
+
 
 CREATE TABLE s4_final_remboursement (
    id INT AUTO_INCREMENT PRIMARY KEY,
