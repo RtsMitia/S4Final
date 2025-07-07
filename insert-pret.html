@@ -1,28 +1,27 @@
 <section id="section-insert-pret" class="content-section">
   <h1>Insertion de prêt</h1>
-
+  <div class="form-group standalone-client-group">
+    <label>Client</label>
+    <div id="client-info-display" class="readonly-client-info"></div>
+    <input type="hidden" id="client-select">
+  </div>
+  
   <div class="form-container">
     <div class="form-row">
     <div class="form-group">
+
         <label for="etablissement-select">Etablissement </label>
         <select id="etablissement-select">
           <option value="">Sélectionnez un etablissement</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="client-select">Client </label>
-        <select id="client-select">
-          <option value="">Sélectionnez un client</option>
-        </select>
-      </div>
 
       <div class="form-group">
         <label for="type-pret-select">Type de prêt</label>
         <select id="type-pret-select">
           <option value="">Sélectionnez un type de prêt</option>
         </select>
-      </div>
 
       <div class="form-group">
         <label for="date-pret">Date du prêt</label>
@@ -32,6 +31,11 @@
       <div class="form-group">
         <label for="montant-pret">Montant</label>
         <input type="number" id="montant-pret" placeholder="Montant du prêt" step="0.01" min="0">
+      </div>
+
+      <div class="form-group">
+        <label for="duree-pret">Duree</label>
+        <input type="number" id="duree" placeholder="Durée du prêt">
       </div>
 
       <div class="form-group">

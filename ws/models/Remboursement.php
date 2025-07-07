@@ -76,10 +76,22 @@ class Remboursement {
         
         try {
             // Get interest per month within the date range
-            $sql = "SELECT mois, annee, SUM(interet) as interet_mensuel 
-                    FROM s4_final_remboursement 
-                    GROUP BY annee, mois
-                    ORDER BY annee, mois";
+            $sql = "SELECT r.mois, r.annee, SUM(r.interet) as interet_mensuel 
+                FROM s4_final_remboursement r
+                INNER JOIN s4_final_pret p ON r.id_pret = p.id
+                INNER JOIN (
+                    SELECT sp1.id_pret, sp1.id_statut
+                    FROM s4_final_statut_pret sp1
+                    INNER JOIN (
+                        SELECT id_pret, MAX(date_statut) as latest_date
+                        FROM s4_final_statut_pret
+                        GROUP BY id_pret
+                    ) sp2 ON sp1.id_pret = sp2.id_pret AND sp1.date_statut = sp2.latest_date
+                ) latest_status ON p.id = latest_status.id_pret
+                INNER JOIN s4_final_statut s ON latest_status.id_statut = s.id
+                WHERE s.libelle = 'valide'
+                GROUP BY r.annee, r.mois
+                ORDER BY r.annee, r.mois";
             
             $stmt = $db->prepare($sql);
             $stmt->execute();
@@ -108,12 +120,24 @@ class Remboursement {
         
         try {
             // Get interest per month within the date range
-            $sql = "SELECT mois, annee, SUM(interet) as interet_mensuel 
-                    FROM s4_final_remboursement 
-                    WHERE (annee > ? OR (annee = ? AND mois >= ?))
-                    AND (annee < ? OR (annee = ? AND mois <= ?))
-                    GROUP BY annee, mois
-                    ORDER BY annee, mois";
+            $sql = "SELECT r.mois, r.annee, SUM(r.interet) as interet_mensuel 
+                FROM s4_final_remboursement r
+                INNER JOIN s4_final_pret p ON r.id_pret = p.id
+                INNER JOIN (
+                    SELECT sp1.id_pret, sp1.id_statut
+                    FROM s4_final_statut_pret sp1
+                    INNER JOIN (
+                        SELECT id_pret, MAX(date_statut) as latest_date
+                        FROM s4_final_statut_pret
+                        GROUP BY id_pret
+                    ) sp2 ON sp1.id_pret = sp2.id_pret AND sp1.date_statut = sp2.latest_date
+                ) latest_status ON p.id = latest_status.id_pret
+                INNER JOIN s4_final_statut s ON latest_status.id_statut = s.id
+                WHERE s.libelle = 'valide'
+                AND (r.annee > ? OR (r.annee = ? AND r.mois >= ?))
+                AND (r.annee < ? OR (r.annee = ? AND r.mois <= ?))
+                GROUP BY r.annee, r.mois
+                ORDER BY r.annee, r.mois";
             
             $stmt = $db->prepare($sql);
             $stmt->execute([

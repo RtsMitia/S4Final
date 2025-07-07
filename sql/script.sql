@@ -47,15 +47,15 @@ CREATE TABLE s4_final_pret(
 );
 
 CREATE TABLE s4_final_statut(
-   id INT,
+   id INT AUTO_INCREMENT,
    libelle VARCHAR(50),
    PRIMARY KEY(id)
 );
 
-INSERT INTO s4_final_statut (libelle) VALUES
-('en attente'),
-('valide'),
-('refus');
+INSERT INTO s4_final_statut (id,libelle) VALUES
+(1,'en attente'),
+(2,'valide'),
+(3,'refus');
 
 CREATE TABLE s4_final_compte(
    id INT AUTO_INCREMENT,

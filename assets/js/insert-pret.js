@@ -25,29 +25,29 @@ function chargerEtablissements() {
     });
 }
 
-function chargerClients() {
-    ajax('GET', '/clients', null, (response) => {
-        const select = document.querySelector('#client-select');
-        select.innerHTML = '<option value="">Sélectionnez un client</option>';
-        
-        response.forEach(client => {
-            const option = document.createElement('option');
-            option.value = client.id;
-            option.textContent = `${client.nom} ${client.prenom}`;
-            select.appendChild(option);
-        });
-    });
+function afficherClientDepuisLocalStorage() {
+    const nom = localStorage.getItem('pretClientNom');
+    const prenom = localStorage.getItem('pretClientPrenom');
+    const idClient = localStorage.getItem('pretClientId');
+
+    if (nom && prenom && idClient) {
+        const affichage = document.querySelector('#client-info-display');
+        const champHidden = document.querySelector('#client-select');
+        affichage.textContent = `${nom} ${prenom} (ID: ${idClient})`;
+        champHidden.value = idClient;
+    }
 }
 
 function ajouterPret() {
     const idClient = document.querySelector('#client-select').value;
-    const idTypePret = document.querySelector('#typepret-select').value;
+    const idTypePret = document.querySelector('#type-pret-select').value;
     const montant = document.querySelector('#montant-pret').value;
     const datePret = document.querySelector('#date-pret').value;
-    const idEf = document.querySelector('#etablissement-id').value;
+    const idEf = document.querySelector('#etablissement-select').value;
+    const duree = document.querySelector('#duree').value;
 
-    if (!idClient || !idTypePret || !montant || !datePret || !assurance) {
-        alert('Veuillez remplir tous les champs');
+    if (!idClient || !idTypePret || !montant || !datePret || !idEf) {
+        alert('Tous les champs ne sont pas remplis');
         return;
     }
 
@@ -56,8 +56,8 @@ function ajouterPret() {
         id_type_pret: parseInt(idTypePret),
         montant: parseFloat(montant),
         date_pret: datePret,
-        assurance: parseFloat(assurance),
-        id_ef: parseInt(idEf)
+        id_ef: parseInt(idEf),
+        duree: parseFloat(duree)
     };
 
     const xhr = new XMLHttpRequest();
@@ -76,8 +76,13 @@ function ajouterPret() {
                         alert(response.message);
                         document.querySelector('#montant-pret').value = '';
                         document.querySelector('#date-pret').value = '';
-                        document.querySelector('#typepret-select').value = '';
-                        document.querySelector('#client-select').value = '';
+                        document.querySelector('#type-pret-select').value = '';
+                        document.querySelector('#duree-pret').value = '';
+
+                        // Nettoyage localStorage (optionnel)
+                        localStorage.removeItem('pretClientId');
+                        localStorage.removeItem('pretClientNom');
+                        localStorage.removeItem('pretClientPrenom');
                     } else if (response.error) {
                         alert('Erreur : ' + response.error);
                     }

@@ -23,7 +23,9 @@ function ajax(method, url, data, callback) {
   console.log('Making request to:', fullUrl);
   
   xhr.open(method, fullUrl, true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  if (method !== 'GET') {
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  }
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4) {
       

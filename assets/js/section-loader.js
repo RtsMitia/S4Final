@@ -55,9 +55,10 @@ async function showSectionWithInclude(sectionName) {
   else if (sectionName === 'ajouter-fond-depart') {
       chargerEtablissements();
   }
-    else if (sectionName === 'insert-pret') {
+  else if (sectionName === 'insert-pret') {
     chargerTypesPret();
-    chargerClients();
+    chargerEtablissements();
+    afficherClientDepuisLocalStorage();
   } else if(sectionName === 'interet') {
     chargerInterets();
   }
