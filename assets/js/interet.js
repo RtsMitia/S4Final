@@ -21,7 +21,7 @@ function chargerInterets() {
             row.innerHTML = `
                 <td>${interet.periode}</td>
                 <td>${interet.mois}/${interet.annee}</td>
-                <td>${parseFloat(interet.interet).toFixed(2)}Ar</td>
+                <td>${parseFloat(interet.interet).toFixed(2)} Ar</td>
             `;
             tableBody.appendChild(row);
         });
@@ -33,11 +33,11 @@ function chargerInterets() {
         totalRow.style.backgroundColor = '#f8f9fa';
         totalRow.innerHTML = `
             <td colspan="2" style="text-align: right;"><strong>Total:</strong></td>
-            <td><strong>${total.toFixed(2)}€</strong></td>
+            <td><strong>${total.toFixed(2)} Ar</strong></td>
         `;
         tableBody.appendChild(totalRow);
     });
-}
+   
 
 function chargerInteretsParPeriode(moisDebut, anneeDebut, moisFin, anneeFin) {
     const params = new URLSearchParams({
@@ -69,7 +69,7 @@ function chargerInteretsParPeriode(moisDebut, anneeDebut, moisFin, anneeFin) {
             row.innerHTML = `
                 <td>${interet.periode}</td>
                 <td>${interet.mois}/${interet.annee}</td>
-                <td>${parseFloat(interet.interet).toFixed(2)}€</td>
+                <td>${parseFloat(interet.interet).toFixed(2)} Ar</td>
             `;
             tableBody.appendChild(row);
         });
@@ -81,16 +81,15 @@ function chargerInteretsParPeriode(moisDebut, anneeDebut, moisFin, anneeFin) {
         totalRow.style.backgroundColor = '#e3f2fd';
         totalRow.innerHTML = `
             <td colspan="2" style="text-align: right;"><strong>Total pour la période:</strong></td>
-            <td><strong>${total.toFixed(2)}€</strong></td>
+            <td><strong>${total.toFixed(2)} Ar</strong></td>
         `;
         tableBody.appendChild(totalRow);
+        const periodeTitle = `Intérêts de ${moisDebut}/${anneeDebut} à ${moisFin}/${anneeFin}`;
     });
 }
 
-// Function to initialize the page and load data
 function initialiserPageInteret() {
     
-    // Add event listener for period filter if form exists
     const filterForm = document.querySelector('#filter-periode-form');
     if (filterForm) {
         filterForm.addEventListener('submit', function(e) {
@@ -109,7 +108,6 @@ function initialiserPageInteret() {
         });
     }
     
-    // Add reset button functionality
     const resetButton = document.querySelector('#reset-filter');
     if (resetButton) {
         resetButton.addEventListener('click', function() {
@@ -121,9 +119,10 @@ function initialiserPageInteret() {
     }
 }
 
-// Auto-initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     if (document.querySelector('#table-interet')) {
         initialiserPageInteret();
     }
 });
+
+}
