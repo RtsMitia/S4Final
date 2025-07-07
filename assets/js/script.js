@@ -38,7 +38,6 @@ function ajax(method, url, data, callback) {
         }
       } else {
         console.error('Error:', xhr.status, xhr.statusText);
-        // alert(`Erreur ${xhr.status}: ${xhr.statusText}\nURL: ${fullUrl}`);
       }
     }
   };
@@ -56,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    // Masquer les résultats quand on clique ailleurs
     document.addEventListener('click', function(event) {
       if (!event.target.closest('.sidebar-search')) {
         document.getElementById('sidebar-search-results').innerHTML = '';
