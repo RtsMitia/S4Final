@@ -10,7 +10,7 @@ class PretController {
         $data = Flight::request()->data;
         $solde = Pret::getSoldeEf($data->id_ef, $data->date_pret);
         $montantPret = $data->montant;
-        error_log($solde);
+        #error_log($solde);
         if($solde>$montantPret){
             $id = Pret::insertPret($data);
             //Pret::insertMouvementFond($data->montant, $data->id_ef, $data->date_pret);

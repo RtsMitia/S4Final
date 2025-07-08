@@ -167,10 +167,10 @@ class Remboursement {
 
     public static function calculateRepaymentSchedule($c, $i, $n, $mois, $annee) {
         try {
-            error_log("calculateRepaymentSchedule called with: c=$c, i=$i, n=$n, mois=$mois, annee=$annee");
+            #error_log("calculateRepaymentSchedule called with: c=$c, i=$i, n=$n, mois=$mois, annee=$annee");
             // Calculate constant annuity (monthly payment)
             $annuiteConstante = Utils::anuiteConstante($c, $i, $n);
-            error_log("Annuite constante calculated: $annuiteConstante");
+            #error_log("Annuite constante calculated: $annuiteConstante");
             
             $capitalRestant = $c; // Initial loan amount
             $currentMois = $mois;
@@ -197,7 +197,7 @@ class Remboursement {
                     'date_periode' => $currentAnnee . '-' . str_pad($currentMois, 2, '0', STR_PAD_LEFT)
                 ];
                 
-                error_log("Periode $periode: interet=$interetPeriode, capital_rembourse=$capitalRembourse, capital_restant=" . ($capitalRestant - $capitalRembourse) . ", mois=$currentMois, annee=$currentAnnee");
+                #error_log("Periode $periode: interet=$interetPeriode, capital_rembourse=$capitalRembourse, capital_restant=" . ($capitalRestant - $capitalRembourse) . ", mois=$currentMois, annee=$currentAnnee");
                 
                 // Update remaining capital for next iteration
                 $capitalRestant -= $capitalRembourse;
@@ -215,7 +215,7 @@ class Remboursement {
             $totalInteret = array_sum(array_column($schedule, 'interet'));
             $totalCapital = array_sum(array_column($schedule, 'capital_rembourse'));
             
-            error_log("Totals: total_annuite=$totalAnnuite, total_interet=$totalInteret, total_capital=$totalCapital");
+            #error_log("Totals: total_annuite=$totalAnnuite, total_interet=$totalInteret, total_capital=$totalCapital");
             
             return [
                 'success' => true,
