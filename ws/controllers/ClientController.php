@@ -28,6 +28,7 @@ class ClientController {
     public static function search() {
         try {
             $searchTerm = isset($_GET['q']) ? $_GET['q'] : '';
+            error_log("p " .$_GET['p']);
             
             $debug = [
                 'message' => 'DEBUT SEARCH',
