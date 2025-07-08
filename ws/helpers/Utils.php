@@ -7,7 +7,7 @@ class Utils {
     }
 
     public static function anuiteConstante($capitalEmprunte, $tauxInteret, $totalMensualite) {
-        $tauxInteret = $tauxInteret/12;
+        $tauxInteret = $tauxInteret/12/100;
         return $capitalEmprunte * ($tauxInteret / (1 - pow(1 + $tauxInteret, -$totalMensualite)));
     }
 }

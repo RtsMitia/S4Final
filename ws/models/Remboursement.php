@@ -27,7 +27,7 @@ class Remboursement {
             // Insert repayment schedule for each month
             $values = [];
             $params = [];
-            
+            $i = $i/12;
             for ($periode = 1; $periode <= $n; $periode++) {
                 // Calculate interest for this period
                 $interetPeriode = $capitalRestant * ($i / 100);
@@ -162,6 +162,83 @@ class Remboursement {
             
         } catch (Exception $e) {
             throw $e;
+        }
+    }
+
+    public static function calculateRepaymentSchedule($c, $i, $n, $mois, $annee) {
+        try {
+            error_log("calculateRepaymentSchedule called with: c=$c, i=$i, n=$n, mois=$mois, annee=$annee");
+            // Calculate constant annuity (monthly payment)
+            $annuiteConstante = Utils::anuiteConstante($c, $i, $n);
+            error_log("Annuite constante calculated: $annuiteConstante");
+            
+            $capitalRestant = $c; // Initial loan amount
+            $currentMois = $mois;
+            $currentAnnee = $annee;
+            
+            $schedule = [];
+            $i = $i/12;
+            for ($periode = 1; $periode <= $n; $periode++) {
+                // Calculate interest for this period
+                $interetPeriode = $capitalRestant * ($i / 100);
+                
+                // Calculate capital repayment for this period
+                $capitalRembourse = $annuiteConstante - $interetPeriode;
+                
+                // Add to schedule array
+                $schedule[] = [
+                    'periode' => $periode,
+                    'annuite' => round($annuiteConstante, 2),
+                    'interet' => round($interetPeriode, 2),
+                    'capital_rembourse' => round($capitalRembourse, 2),
+                    'capital_restant' => round($capitalRestant - $capitalRembourse, 2),
+                    'mois' => $currentMois,
+                    'annee' => $currentAnnee,
+                    'date_periode' => $currentAnnee . '-' . str_pad($currentMois, 2, '0', STR_PAD_LEFT)
+                ];
+                
+                error_log("Periode $periode: interet=$interetPeriode, capital_rembourse=$capitalRembourse, capital_restant=" . ($capitalRestant - $capitalRembourse) . ", mois=$currentMois, annee=$currentAnnee");
+                
+                // Update remaining capital for next iteration
+                $capitalRestant -= $capitalRembourse;
+                
+                // Move to next month
+                $currentMois++;
+                if ($currentMois > 12) {
+                    $currentMois = 1;
+                    $currentAnnee++;
+                }
+            }
+            
+            // Calculate totals
+            $totalAnnuite = array_sum(array_column($schedule, 'annuite'));
+            $totalInteret = array_sum(array_column($schedule, 'interet'));
+            $totalCapital = array_sum(array_column($schedule, 'capital_rembourse'));
+            
+            error_log("Totals: total_annuite=$totalAnnuite, total_interet=$totalInteret, total_capital=$totalCapital");
+            
+            return [
+                'success' => true,
+                'schedule' => $schedule,
+                'summary' => [
+                    'loan_amount' => $c,
+                    'interest_rate' => $i,
+                    'duration_months' => $n,
+                    'monthly_payment' => round($annuiteConstante, 2),
+                    'total_payments' => round($totalAnnuite, 2),
+                    'total_interest' => round($totalInteret, 2),
+                    'total_capital' => round($totalCapital, 2),
+                    'start_month' => $mois,
+                    'start_year' => $annee
+                ]
+            ];
+            
+        } catch (Exception $e) {
+            error_log("Error in calculateRepaymentSchedule: " . $e->getMessage());
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
         }
     }
 }
