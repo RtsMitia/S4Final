@@ -11,6 +11,31 @@ class Remboursement {
         return $db->lastInsertId();
     }
 
+    public static function getTauxAssurance($idPret) {
+        $db = getDB();
+
+        $sql = "
+            SELECT tp.assurance
+            FROM s4_final_pret p
+            JOIN s4_final_type_pret tp ON p.id_type_pret = tp.id
+            WHERE p.id = :idPret
+            LIMIT 1
+        ";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':idPret', $idPret, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result && isset($result['assurance'])) {
+            return $result['assurance'];
+        } else {
+            return 0; 
+        }
+    }
+
+
     public static function createInsert($c, $i, $n, $idPret, $mois, $annee) {
         $db = getDB();
         
@@ -28,6 +53,8 @@ class Remboursement {
             $values = [];
             $params = [];
             $i = $i/12;
+            $tauxAssurance = Remboursement::getTauxAssurance($idPret);
+            $assurance = $capitalRestant * ($tauxAssurance/12/100);
             for ($periode = 1; $periode <= $n; $periode++) {
                 // Calculate interest for this period
                 $interetPeriode = $capitalRestant * ($i / 100);
@@ -36,11 +63,12 @@ class Remboursement {
                 $capitalRembourse = $annuiteConstante - $interetPeriode;
                 
                 // Add values to batch insert
-                $values[] = "(?, ?, ?, ?, ?, ?)";
+                $values[] = "(?, ?, ?, ?, ?, ?, ?)";
                 $params = array_merge($params, [
                     $idPret,
                     $annuiteConstante,
                     $interetPeriode,
+                    $assurance,
                     $capitalRembourse,
                     $currentMois,
                     $currentAnnee
@@ -58,7 +86,7 @@ class Remboursement {
             }
             
             // Single batch insert
-            $sql = "INSERT INTO s4_final_remboursement (id_pret, annuite, interet, capital_rembourse, mois, annee) VALUES " . implode(", ", $values);
+            $sql = "INSERT INTO s4_final_remboursement (id_pret, annuite, interet, assurance, capital_rembourse, mois, annee) VALUES " . implode(", ", $values);
             $stmt = $db->prepare($sql);
             $stmt->execute($params);
             
@@ -165,7 +193,7 @@ class Remboursement {
         }
     }
 
-    public static function calculateRepaymentSchedule($c, $i, $n, $mois, $annee) {
+    public static function calculateRepaymentSchedule($c, $i, $n, $mois, $annee, $tauxAssurance) {
         try {
             #error_log("calculateRepaymentSchedule called with: c=$c, i=$i, n=$n, mois=$mois, annee=$annee");
             // Calculate constant annuity (monthly payment)
@@ -178,6 +206,7 @@ class Remboursement {
             
             $schedule = [];
             $i = $i/12;
+            $assurance = $capitalRestant * ($tauxAssurance/12/100);
             for ($periode = 1; $periode <= $n; $periode++) {
                 // Calculate interest for this period
                 $interetPeriode = $capitalRestant * ($i / 100);
@@ -190,6 +219,7 @@ class Remboursement {
                     'periode' => $periode,
                     'annuite' => round($annuiteConstante, 2),
                     'interet' => round($interetPeriode, 2),
+                    'assurance' => round($assurance, 2),
                     'capital_rembourse' => round($capitalRembourse, 2),
                     'capital_restant' => round($capitalRestant - $capitalRembourse, 2),
                     'mois' => $currentMois,
@@ -223,6 +253,9 @@ class Remboursement {
                 'summary' => [
                     'loan_amount' => $c,
                     'interest_rate' => $i,
+                    'assurance' => $tauxAssurance,
+                    'montant_assurance' => round($assurance, 2),
+                    'a_payer_par_mois' => round($assurance, 2) + round($annuiteConstante, 2),
                     'duration_months' => $n,
                     'monthly_payment' => round($annuiteConstante, 2),
                     'total_payments' => round($totalAnnuite, 2),

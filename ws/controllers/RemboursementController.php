@@ -30,6 +30,7 @@ class RemboursementController {
                 // Get parameters from request
                 $montant = Flight::request()->query->montant ?? Flight::request()->data->montant ?? null;
                 $taux = Flight::request()->query->taux ?? Flight::request()->data->taux ?? null;
+                $assurance = Flight::request()->query->assurance ?? Flight::request()->data->assurance ?? null;
                 $duree = Flight::request()->query->duree ?? Flight::request()->data->duree ?? null;
                 $mois = Flight::request()->query->mois ?? Flight::request()->data->mois ?? date('n');
                 $annee = Flight::request()->query->annee ?? Flight::request()->data->annee ?? date('Y');
@@ -55,6 +56,7 @@ class RemboursementController {
                 // Convert and validate parameters
                 $montant = floatval($montant);
                 $taux = floatval($taux);
+                $assurance = floatval($assurance);
                 $duree = intval($duree);
                 $mois = intval($mois);
                 $annee = intval($annee);
@@ -67,6 +69,10 @@ class RemboursementController {
                 
                 if ($taux <= 0 || $taux > 100) {
                     Flight::json(['success' => false, 'error' => 'Le taux doit être entre 0 et 100'], 400);
+                    return;
+                }
+                if ($assurance <= 0 || $assurance > 100) {
+                    Flight::json(['success' => false, 'error' => 'L assurance doit être entre 0 et 100'], 400);
                     return;
                 }
                 
@@ -86,7 +92,7 @@ class RemboursementController {
                 }
                 
                 // Calculate repayment schedule
-                $schedule = Remboursement::calculateRepaymentSchedule($montant, $taux, $duree, $mois, $annee);
+                $schedule = Remboursement::calculateRepaymentSchedule($montant, $taux, $duree, $mois, $annee, $assurance);
                 
                 Flight::json($schedule);
                 

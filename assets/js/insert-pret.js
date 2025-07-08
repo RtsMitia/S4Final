@@ -7,6 +7,7 @@ function chargerTypesPret() {
             option.value = type.id;
             option.textContent = type.nom;
             option.setAttribute('data-taux', type.taux || 12);
+            option.setAttribute('data-assurance', type.assurance || 0);
             select.appendChild(option);
         });
     });
@@ -93,6 +94,7 @@ function ajouterPret() {
                         const typePretSelect = document.querySelector('#type-pret-select');
                         const selectedOption = typePretSelect.selectedOptions[0];
                         const taux = selectedOption.getAttribute('data-taux') || 12;
+                        const assurance = selectedOption.getAttribute('data-assurance') || 0;
                         
                         const dureeValue = document.querySelector('#duree').value;
                         
@@ -119,7 +121,8 @@ function ajouterPret() {
                                 parseFloat(montant), 
                                 parseFloat(taux), 
                                 parseInt(dureeValue), 
-                                datePretAvecDelais
+                                datePretAvecDelais,
+                                parseFloat(assurance)
                             );
                         } else {
                             console.log('Invalid duration:', dureeValue);
@@ -152,8 +155,8 @@ function ajouterPret() {
     xhr.send(JSON.stringify(data));
 }
 
-function calculerEtAfficherEcheancier(montant, taux, duree, datePret) {
-    console.log('calculerEtAfficherEcheancier called with:', {montant, taux, duree, datePret});
+function calculerEtAfficherEcheancier(montant, taux, duree, datePret, assurance) {
+    console.log('calculerEtAfficherEcheancier called with:', {montant, taux, duree, datePret, assurance});
     
     // Extract month and year from date
     const date = new Date(datePret);
@@ -168,7 +171,8 @@ function calculerEtAfficherEcheancier(montant, taux, duree, datePret) {
         taux: taux,
         duree: duree,
         mois: mois,
-        annee: annee
+        annee: annee,
+        assurance: assurance
     });
     
     const apiUrl = `/remboursement/calculate?${params.toString()}`;
@@ -224,12 +228,24 @@ function afficherEcheancierDansModal(scheduleData) {
                 <span class="value">${scheduleData.summary.interest_rate}% / Mois</span>
             </div>
             <div class="summary-item">
+                <span class="label">Taux d'assurance:</span>
+                <span class="value">${scheduleData.summary.assurance}% </span>
+            </div>
+            <div class="summary-item">
                 <span class="label">Durée:</span>
                 <span class="value">${scheduleData.summary.duration_months} mois</span>
             </div>
             <div class="summary-item">
-                <span class="label">Mensualité:</span>
-                <span class="value">${scheduleData.summary.monthly_payment.toFixed(2)} Ar</span>
+                <span class="label">Anuité:</span>
+                <span class="value">${scheduleData.summary.monthly_payment} Ar</span>
+            </div>
+            <div class="summary-item">
+                <span class="label">Montant assurance :</span>
+                <span class="value">${scheduleData.summary.montant_assurance} mois</span>
+            </div>
+            <div class="summary-item">
+                <span class="label">Paiement mensuel (anuité + assurance):</span>
+                <span class="value">${scheduleData.summary.a_payer_par_mois.toFixed(2)} Ar</span>
             </div>
             <div class="summary-item">
                 <span class="label">Total à payer:</span>
@@ -255,6 +271,7 @@ function afficherEcheancierDansModal(scheduleData) {
                 <th>Période</th>
                 <th>Date</th>
                 <th>Mensualité</th>
+                <th>Assurance</th>
                 <th>Intérêt</th>
                 <th>Capital</th>
                 <th>Capital Restant</th>
@@ -266,6 +283,7 @@ function afficherEcheancierDansModal(scheduleData) {
                     <td>${payment.periode}</td>
                     <td>${payment.mois}/${payment.annee}</td>
                     <td>${payment.annuite.toFixed(2)} Ar</td>
+                    <td>${payment.assurance.toFixed(2)} Ar</td>
                     <td>${payment.interet.toFixed(2)} Ar</td>
                     <td>${payment.capital_rembourse.toFixed(2)} Ar</td>
                     <td>${payment.capital_restant.toFixed(2)} Ar</td>
@@ -325,6 +343,7 @@ function valider() {
     let montant = 0;
     let taux = 0;
     let duree = 0;
+    let assurance=0;
     
     summaryItems.forEach(item => {
         const label = item.querySelector('.label').textContent;
@@ -336,7 +355,9 @@ function valider() {
             taux = parseFloat(value.replace(/[^\d.-]/g, ''));
         } else if (label.includes('Durée')) {
             duree = parseInt(value.replace(/[^\d]/g, ''));
-        }
+        } else if (label.includes('Taux d\'assurance')) {
+            assurance = parseFloat(value.replace(/[^\d.-]/g, ''));
+        } 
     });
     
     // Get the loan ID from localStorage or another source
@@ -368,7 +389,8 @@ function valider() {
         id_pret: parseInt(idPret),
         mois: mois,
         annee: annee,
-        date: date
+        date: date,
+        assurance: assurance
     };
     console.log('Validation data:', data);
     
