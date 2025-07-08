@@ -1,4 +1,4 @@
-const apiBase = "http://localhost/ProjetFinalS4/ws";
+const apiBase = "/ETU003363/ProjetFinalS4/ws";
 
 function showSection(sectionName) {
   document.querySelectorAll('.content-section').forEach(section => {
