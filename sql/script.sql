@@ -105,5 +105,6 @@ CREATE TABLE s4_final_remboursement (
    capital_rembourse DECIMAL(15,2),
    mois INT, 
    annee INT,
+   assurance DECIMAL(15,2),
    FOREIGN KEY(id_pret) REFERENCES s4_final_pret(id)
 );
