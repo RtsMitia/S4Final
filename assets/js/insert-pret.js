@@ -171,28 +171,27 @@ function calculerEtAfficherEcheancier(montant, taux, duree, datePret) {
         annee: annee
     });
     
-    const apiUrl = `${apiBase}/remboursement/calculate?${params.toString()}`;
-    console.log('API URL:', apiUrl);
+    const apiUrl = `/remboursement/calculate?${params.toString()}`;
+    console.log('API URL will be:', apiBase + apiUrl);
     
-    // Call the basic schedule calculation API
-    fetch(apiUrl)
-        .then(response => {
-            console.log('API Response status:', response.status);
-            return response.json();
-        })
-        .then(data => {
-            console.log('API Response data:', data);
-            if (data.success) {
-                afficherEcheancierDansModal(data);
-            } else {
-                console.error('API Error:', data.error);
-                alert('Erreur lors du calcul de l\'échéancier: ' + data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-            alert('Erreur lors du calcul de l\'échéancier: ' + error.message);
-        });
+    // Use the ajax function from script.js instead of fetch
+    ajax('GET', apiUrl, null, function(data) {
+        console.log('API Response data:', data);
+        
+        if (data && data.success) {
+            afficherEcheancierDansModal(data);
+        } else if (data && data.error) {
+            console.error('API Error:', data.error);
+            alert('Erreur lors du calcul de l\'échéancier: ' + data.error);
+        } else if (data === false) {
+            // This is when the ajax function returns false (parse error or other issue)
+            console.error('AJAX Error: Failed to get valid response');
+            alert('Erreur lors du calcul de l\'échéancier: Réponse invalide du serveur');
+        } else {
+            console.error('Unexpected response:', data);
+            alert('Erreur lors du calcul de l\'échéancier: Réponse inattendue du serveur');
+        }
+    });
 }
 
 
@@ -222,7 +221,7 @@ function afficherEcheancierDansModal(scheduleData) {
             </div>
             <div class="summary-item">
                 <span class="label">Taux d'intérêt:</span>
-                <span class="value">${scheduleData.summary.interest_rate}% / an</span>
+                <span class="value">${scheduleData.summary.interest_rate}% / Mois</span>
             </div>
             <div class="summary-item">
                 <span class="label">Durée:</span>
@@ -379,65 +378,71 @@ function valider() {
     validateButton.textContent = 'Validation en cours...';
     validateButton.disabled = true;
     
+    const xhr = new XMLHttpRequest();
+    const url = apiBase + '/remboursement/create';
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
     // Call the createInsert API
-    fetch(`${apiBase}/remboursement/create`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(result => {
-        console.log('Validation result:', result);
-        
-        if (result.success) {
-            alert('Échéancier validé et enregistré avec succès!');
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            console.log('Validation response status:', xhr.status);
+            console.log('Validation response text:', xhr.responseText);
             
-            // Update button to show success
-            validateButton.textContent = '✓ Validé';
-            validateButton.style.background = '#27ae60';
-            validateButton.disabled = true;
-            
-            // Add success message to modal
-            const successMessage = document.createElement('div');
-            successMessage.className = 'success-message';
-            successMessage.innerHTML = `
-                <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 4px; margin: 10px 0;">
-                    <strong>✓ Succès:</strong> L'échéancier a été enregistré dans la base de données.
-                    <br><small>ID Prêt: ${result.data.id_pret} | Périodes créées: ${result.data.periodes_creees}</small>
-                </div>
-            `;
-            
-            const modalContent = modal.querySelector('.schedule-content');
-            modalContent.insertBefore(successMessage, modalContent.firstChild);
-            
-            // Clean up localStorage
-            localStorage.removeItem('dernierPretId');
-            
-            // Option to close modal automatically after success
-            setTimeout(() => {
-                if (confirm('Échéancier validé! Voulez-vous fermer cette fenêtre?')) {
-                    fermerModalEcheancier();
+            if (xhr.status === 200 || xhr.status === 201) {
+                try {
+                    const result = JSON.parse(xhr.responseText);
+                    console.log('Validation result:', result);
+                    
+                    if (result.success) {
+                        alert('Échéancier validé et enregistré avec succès!');
+                        
+                        // Update button to show success
+                        validateButton.textContent = '✓ Validé';
+                        validateButton.style.background = '#27ae60';
+                        validateButton.disabled = true;
+                        
+                        // Add success message to modal
+                        const successMessage = document.createElement('div');
+                        successMessage.className = 'success-message';
+                        successMessage.innerHTML = `
+                            <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 4px; margin: 10px 0;">
+                                <strong>✓ Succès:</strong> L'échéancier a été enregistré dans la base de données.
+                                <br><small>ID Prêt: ${result.data.id_pret} | Périodes créées: ${result.data.periodes_creees}</small>
+                            </div>
+                        `;
+                        
+                        const modalContent = modal.querySelector('.schedule-content');
+                        modalContent.insertBefore(successMessage, modalContent.firstChild);
+                        
+                        // Clean up localStorage
+                        localStorage.removeItem('dernierPretId');
+                        
+                    } else {
+                        alert('Erreur lors de la validation: ' + result.error);
+                        
+                        // Restore button state
+                        validateButton.textContent = originalText;
+                        validateButton.disabled = false;
+                    }
+                } catch (e) {
+                    console.error('Parse error:', e);
+                    alert('Erreur lors de la validation: Réponse invalide du serveur');
+                    
+                    // Restore button state
+                    validateButton.textContent = originalText;
+                    validateButton.disabled = false;
                 }
-            }, 2000);
-            
-        } else {
-            alert('Erreur lors de la validation: ' + result.error);
-            
-            // Restore button state
-            validateButton.textContent = originalText;
-            validateButton.disabled = false;
+            } else {
+                alert(`Erreur ${xhr.status} : ${xhr.statusText}`);
+                
+                // Restore button state
+                validateButton.textContent = originalText;
+                validateButton.disabled = false;
+            }
         }
-    })
-    .catch(error => {
-        console.error('Validation error:', error);
-        alert('Erreur lors de la validation: ' + error.message);
-        
-        // Restore button state
-        validateButton.textContent = originalText;
-        validateButton.disabled = false;
-    });
+    };
+    
+    xhr.send(JSON.stringify(data));
 }
 
 // Add CSS for modal
