@@ -152,7 +152,6 @@ function ajouterPret() {
     xhr.send(JSON.stringify(data));
 }
 
-
 function calculerEtAfficherEcheancier(montant, taux, duree, datePret) {
     console.log('calculerEtAfficherEcheancier called with:', {montant, taux, duree, datePret});
     

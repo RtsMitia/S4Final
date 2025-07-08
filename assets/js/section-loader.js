@@ -11,6 +11,12 @@ async function loadSection(sectionName) {
     
     const mainContent = document.querySelector('.main-content');
     mainContent.appendChild(container.firstElementChild);
+    
+    // Load Chart.js before the section script if it's the interet section
+    if (sectionName === 'interet') {
+      await loadScript('assets/js/chart.umd.js');
+    }
+    
     await loadScript(`assets/js/${sectionName}.js`);
     
     return true;

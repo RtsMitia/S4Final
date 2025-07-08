@@ -15,6 +15,8 @@ INSERT INTO s4_final_client (nom, prenom, mail) VALUES
 ('Rasoanaivo', 'Soa', 'soa.rasoanaivo@example.com');
 
 
+INSERT INTO s4_final_statut_pret (id_pret, id_statut, date_statut) 
+VALUES(1,2,'2025-05-05');
 INSERT INTO s4_final_pret (montant, date_pret, id_client, id_type_pret, duree) VALUES 
 (50000.00, '2024-01-15', 1, 1, 24),
 (200000.00, '2024-02-01', 2, 2, 240),

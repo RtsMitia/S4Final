@@ -70,5 +70,35 @@ class Pret {
         return $total_entree - $total_sortie;
     }
 
+    public static function getPretDetails($id_pret) {
+        $db = getDB();
+        $sql = "SELECT 
+                    p.id, p.montant, p.date_pret, p.duree,
+                    c.nom as client_nom, c.prenom as client_prenom, c.mail as client_mail,
+                    tp.nom as type_nom, tp.taux, tp.assurance,
+                    ef.nom as etablissement_nom
+                FROM s4_final_pret p
+                JOIN s4_final_client c ON p.id_client = c.id
+                JOIN s4_final_type_pret tp ON p.id_type_pret = tp.id
+                LEFT JOIN s4_final_ef_utilisateurs efu ON 1=1
+                LEFT JOIN s4_final_etablissement_financier ef ON efu.id_ef = ef.id
+                WHERE p.id = ?
+                LIMIT 1";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$id_pret]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function getRemboursementsPret($id_pret) {
+        $db = getDB();
+        $sql = "SELECT annuite, interet, capital_rembourse, mois, annee 
+                FROM s4_final_remboursement 
+                WHERE id_pret = ? 
+                ORDER BY annee, mois";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$id_pret]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 ?>
