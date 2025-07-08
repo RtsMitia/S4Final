@@ -53,7 +53,7 @@ class Pret {
                 SUM(CASE WHEN type = 'entree' THEN montant ELSE 0 END) AS total_entree,
                 SUM(CASE WHEN type = 'sortie' THEN montant ELSE 0 END) AS total_sortie
             FROM s4_final_mouvement_fond
-            WHERE id_ef = ? AND date_mouvement <= ?
+            WHERE id_ef = ? AND DATE(date_mouvement) <= ?
         ";
         
         $stmt = $db->prepare($sql);
