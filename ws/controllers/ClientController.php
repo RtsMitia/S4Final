@@ -27,24 +27,12 @@ class ClientController {
 
     public static function search() {
         try {
-            $searchTerm = isset($_GET['q']) ? $_GET['q'] : '';
-            
-            $debug = [
-                'message' => 'DEBUT SEARCH',
-                'searchTerm' => $searchTerm,
-                'GET' => $_GET,
-                'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD'],
-                'REQUEST_URI' => $_SERVER['REQUEST_URI']
-            ];
-            
-           if (!$searchTerm) {
-                error_log('Terme de recherche vide');
-                Flight::json(['error' => 'Terme de recherche requis', 'debug' => $debug], 400);
-                return;
-            }
-            
+            $uri = $_SERVER['REQUEST_URI'];
+            $parts = explode('/', $uri);
+            $searchTerm = end($parts); 
+            $searchTerm = urldecode($searchTerm);
             $clients = Client::search($searchTerm);
-            Flight::json(['clients' => $clients, 'debug' => $debug]);
+            Flight::json(['clients' => $clients]);
         } catch (Exception $e) {
             error_log('Erreur search clients: ' . $e->getMessage());
             error_log('Stack trace: ' . $e->getTraceAsString());

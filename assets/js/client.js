@@ -7,32 +7,28 @@ function rechercherClient() {
         return;
     }
     
-    const url = `http://localhost/ProjetFinalS4/ws/search_client.php?q=${encodeURIComponent(searchTerm)}`;
+    const url = `/clients/search/${encodeURIComponent(searchTerm)}`;
+    console.log('URL appelée:', url);
+    console.log('apiBase:', apiBase);
+    console.log('URL complète:', apiBase + url);
     
-    fetch(url)
-        .then(response => {
-            console.log('Response status:', response.status);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.text();
-        })
-        .then(text => {
-            console.log('Réponse texte brute:', text);
-            try {
-                const data = JSON.parse(text);
-                afficherResultatsRecherche(data);
-            } catch (e) {
-                console.error('Erreur parsing JSON:', e);
-                document.getElementById('sidebar-search-results').innerHTML = 
-                    '<div class="sidebar-no-results">Erreur de format de données</div>';
-            }
-        })
-        .catch(error => {
-            console.error('Erreur fetch:', error);
-            document.getElementById('sidebar-search-results').innerHTML = 
-                '<div class="sidebar-no-results">Erreur de connexion</div>';
-        });
+    ajax('GET', url, null, function(response) {
+      console.log('Réponse AJAX:', response);
+      console.log('Type de réponse:', typeof response);
+      
+      if (response === false) {
+          document.getElementById('sidebar-search-results').innerHTML = 
+              '<div class="sidebar-no-results">Erreur de format de données</div>';
+          return;
+      }
+      
+      if (response.error) {
+          document.getElementById('sidebar-search-results').innerHTML = 
+              `<div class="sidebar-no-results">Erreur: ${response.error}</div>`;
+          return;
+      }
+      afficherResultatsRecherche(response.clients || []);
+    });
 }
 
 function afficherResultatsRecherche(data) {

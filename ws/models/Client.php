@@ -37,16 +37,8 @@ class Client {
         $likeTerm = '%' . $searchTerm . '%';
         $stmt->bindParam(':search', $likeTerm, PDO::PARAM_STR);
         
-        // Debug logs
-        error_log('SQL: ' . $sql);
-        error_log('Search term: ' . $searchTerm);
-        error_log('Like term: ' . $likeTerm);
-        
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        error_log('Results count: ' . count($results));
-        error_log('Results: ' . json_encode($results));
         
         return $results;
     }

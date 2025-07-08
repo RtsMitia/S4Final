@@ -5,7 +5,7 @@ class MouvementFondController {
     public static function getAll() {
         $etudiants = Etudiant::getAll();
         Flight::json($etudiants);
-        error_log(print_r($etudiants, true));
+        #error_log(print_r($etudiants, true));
     }
 
     public static function getById($id) {
