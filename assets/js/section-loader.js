@@ -67,5 +67,8 @@ async function showSectionWithInclude(sectionName) {
     afficherClientDepuisLocalStorage();
   } else if(sectionName === 'interet') {
     chargerInterets();
-  }
+  } else if(sectionName === 'montant-total') {
+  chargerEtablissementsPourMontantTotal();
+}
+
 }

@@ -52,4 +52,57 @@ class EfController {
             }
         }
     }
+
+    public static function getMontantTotalParMois($idEf) {
+        try {
+            $data = Ef::getMontantTotalParMois($idEf);
+            if (empty($data)) {
+                Flight::json(['error' => "Aucun montant trouvé pour l'établissement financier id=$idEf"], 404);
+                return;
+            }
+            Flight::json($data);
+        } catch (Exception $e) {
+            error_log("Erreur EfController::getMontantTotalParMois - " . $e->getMessage());
+            Flight::json(['error' => 'Erreur lors de la récupération des montants totaux'], 500);
+        }
+    }
+
+public static function getMontantTotalEntreDeuxDates($idEf) {
+    $moisdebut = Flight::request()->query->moisdebut;
+    $anneedebut = Flight::request()->query->anneedebut;
+    $moisfin = Flight::request()->query->moisfin;
+    $anneefin = Flight::request()->query->anneefin;
+
+    if (!$moisdebut || !$anneedebut || !$moisfin || !$anneefin) {
+        Flight::json(["error" => "Période invalide"], 400);
+        return;
+    }
+
+    $resultatsParMois = Ef::getMontantTotalParMois($idEf);
+    error_log("Données complètes: " . print_r($resultatsParMois, true));
+
+    $resultatsFiltres = [];
+    foreach ($resultatsParMois as $item) {
+        $annee = (int)$item['annee'];
+        $mois = (int)$item['mois'];
+        $anneeDebut = (int)$anneedebut;
+        $moisDebut = (int)$moisdebut;
+        $anneeFin = (int)$anneefin;
+        $moisFin = (int)$moisfin;
+
+        if (
+            ($annee > $anneeDebut || ($annee == $anneeDebut && $mois >= $moisDebut)) &&
+            ($annee < $anneeFin || ($annee == $anneeFin && $mois <= $moisFin))
+        ) {
+            $item['reste_non_emprunte'] = $item['montant_total'] - ($item['remboursements'] ?? 0);
+            $item['remboursements'] = $item['remboursements'] ?? 0;
+
+            $resultatsFiltres[] = $item;
+        }
+    }
+
+    Flight::json($resultatsFiltres);
+}
+
+
 }
