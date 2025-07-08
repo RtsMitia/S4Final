@@ -1,25 +1,9 @@
-function chargerEtablissements() {
-    ajax('GET', '/ef', null, (response) => {
-        const select = document.querySelector('#etablissement-select');
-        select.innerHTML = '<option value="">Sélectionnez un établissement</option>';
-        
-        response.forEach(type => {
-            const option = document.createElement('option');
-            option.value = type.id;
-            option.textContent = type.nom;
-            select.appendChild(option);
-        });
-    });
-}
 
 function ajouterFond() {
-    const etablissementId = document.querySelector('#etablissement-select').value;
+    //const etablissementId = document.querySelector('#etablissement-select').value;
+    const etablissementId = 1;
     const fondDepart = document.querySelector('#fond-depart').value;
     
-    if (!etablissementId) {
-        alert('Veuillez sélectionner un établissement');
-        return;
-    }
     
     if (!fondDepart || fondDepart <= 0) {
         alert('Veuillez entrer un montant valide');
@@ -43,10 +27,6 @@ function ajouterFond() {
                 alert('Fond de départ ajouté avec succès!');
                 // Clear the fund input
                 document.querySelector('#fond-depart').value = '';
-                // Optionally refresh the table if it exists
-                if (typeof chargerTableEtablissements === 'function') {
-                    chargerTableEtablissements();
-                }
             } else {
                 console.error('Error:', xhr.status, xhr.statusText);
                 try {

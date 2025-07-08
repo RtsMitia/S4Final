@@ -13,20 +13,6 @@ function chargerTypesPret() {
     });
 }
 
-function chargerEtablissements() {
-    ajax('GET', '/ef', null, (response) => {
-        const select = document.querySelector('#etablissement-select');
-        select.innerHTML = '<option value="">Sélectionnez un établissement</option>';
-        
-        response.forEach(type => {
-            const option = document.createElement('option');
-            option.value = type.id;
-            option.textContent = type.nom;
-            select.appendChild(option);
-        });
-    });
-}
-
 function afficherClientDepuisLocalStorage() {
     const nom = localStorage.getItem('pretClientNom');
     const prenom = localStorage.getItem('pretClientPrenom');
@@ -45,7 +31,8 @@ function ajouterPret() {
     const idTypePret = document.querySelector('#type-pret-select').value;
     const montant = document.querySelector('#montant-pret').value;
     const datePret = document.querySelector('#date-pret').value;
-    const idEf = document.querySelector('#etablissement-select').value;
+    //const idEf = document.querySelector('#etablissement-select').value;
+    const idEf = 1;
     const duree = document.querySelector('#duree').value;
     const delais = document.querySelector('#delais').value;
 
