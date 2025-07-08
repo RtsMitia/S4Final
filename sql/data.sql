@@ -41,7 +41,7 @@ INSERT INTO s4_final_remboursement (id_pret, annuite, interet, capital_rembourse
 -- Juin 2024
 (1, 2353.67, 405.49, 1948.18, 6, 2024),
 
--- Prêt 2: 200,000€ à 8.5% sur 240 mois (starting February 2024)
+-- Prêt 2: 200,000Ar à 8.5% sur 240 mois (starting February 2024)
 -- Février 2024
 (2, 1562.50, 1416.67, 145.83, 2, 2024),
 -- Mars 2024
@@ -55,7 +55,7 @@ INSERT INTO s4_final_remboursement (id_pret, annuite, interet, capital_rembourse
 -- Juillet 2024
 (2, 1562.50, 1411.43, 151.07, 7, 2024),
 
--- Prêt 3: 25,000€ à 10% sur 36 mois (starting March 2024)
+-- Prêt 3: 25,000Ar à 10% sur 36 mois (starting March 2024)
 -- Mars 2024
 (3, 806.67, 208.33, 598.34, 3, 2024),
 -- Avril 2024

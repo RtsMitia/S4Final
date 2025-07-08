@@ -203,4 +203,24 @@ class RemboursementController {
                 ], 500);
             }
         }
+
+    public static function getPretsAvecRemboursements() {
+        try {
+            $prets = Remboursement::getPretsAvecRemboursements();
+            Flight::json($prets);
+        } catch (Exception $e) {
+            error_log('Erreur getPretsAvecRemboursements: ' . $e->getMessage());
+            Flight::json(['error' => 'Erreur lors de la récupération des prêts'], 500);
+        }
+    }
+
+    public static function getRemboursementsPret($pretId) {
+        try {
+            $remboursements = Remboursement::getRemboursementsPret($pretId);
+            Flight::json($remboursements);
+        } catch (Exception $e) {
+            error_log('Erreur getRemboursementsPret: ' . $e->getMessage());
+            Flight::json(['error' => 'Erreur lors de la récupération des remboursements'], 500);
+        }
+    }
 }

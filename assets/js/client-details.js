@@ -57,7 +57,7 @@ function afficherPretsClient(prets) {
         html += `
             <div class="pret-item">
                 <div class="pret-info">
-                    <strong>Montant:</strong> ${pret.montant} €<br>
+                    <strong>Montant:</strong> ${pret.montant} Ar<br>
                     <strong>Date:</strong> ${pret.date_pret}<br>
                     <strong>Type:</strong> ${pret.nom_type_pret || 'Non défini'}<br>
                     <strong>Taux:</strong> ${pret.taux || 'N/A'}%<br>

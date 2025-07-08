@@ -60,7 +60,7 @@ class PretController {
             $pdf->SetFont('Arial', 'B', 14);
             $pdf->Cell(0, 10, utf8_decode('DÉTAILS DU PRÊT'), 0, 1, 'L');
             $pdf->SetFont('Arial', '', 12);
-            $pdf->Cell(0, 6, utf8_decode('Capital prêté : ' . number_format($pret['montant'], 2, ',', ' ') . ' €'), 0, 1, 'L');
+            $pdf->Cell(0, 6, utf8_decode('Capital prêté : ' . number_format($pret['montant'], 2, ',', ' ') . ' Ar'), 0, 1, 'L');
             $pdf->Cell(0, 6, utf8_decode('Durée : ' . $pret['duree'] . ' mois'), 0, 1, 'L');
             $pdf->Cell(0, 6, utf8_decode('Date du prêt : ' . date('d/m/Y', strtotime($pret['date_pret']))), 0, 1, 'L');
             $pdf->Cell(0, 6, utf8_decode('Type de prêt : ' . $pret['type_nom']), 0, 1, 'L');

@@ -241,4 +241,36 @@ class Remboursement {
             ];
         }
     }
+
+    // maka anle info anle pret
+    public static function getPretsAvecRemboursements() {
+        $db = getDB();
+        $sql = "SELECT DISTINCT p.id, p.montant, p.date_pret, p.duree,
+                c.nom as client_nom, c.prenom as client_prenom, c.mail as client_mail,
+                tp.nom as type_nom, tp.taux, tp.assurance
+                FROM s4_final_pret p
+                JOIN s4_final_client c ON p.id_client = c.id
+                JOIN s4_final_type_pret tp ON p.id_type_pret = tp.id
+                WHERE EXISTS (
+                    SELECT 1 FROM s4_final_remboursement r WHERE r.id_pret = p.id
+                )
+                ORDER BY p.date_pret DESC";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getRemboursementsPret($pretId) {
+        $db = getDB();
+        $sql = "SELECT r.*, p.montant as montant_pret, tp.assurance, r.assurance as assurance
+                FROM s4_final_remboursement r
+                JOIN s4_final_pret p ON r.id_pret = p.id
+                JOIN s4_final_type_pret tp ON p.id_type_pret = tp.id
+                WHERE r.id_pret = ?
+                ORDER BY r.annee, r.mois";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$pretId]);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
 }
