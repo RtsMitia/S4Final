@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Gestion Financière</title>
   <link rel="stylesheet" href="assets/css/index.css">
+  <!-- Font Awesome pour les icônes -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
@@ -14,8 +16,11 @@
       <h2>Gestion Financière</h2>
       
       <div class="sidebar-search">
-        <input type="text" id="sidebar-search-client" placeholder="🔍 Rechercher un client..." 
-        class="sidebar-search-input" onkeyup="rechercherClient()">
+        <div class="search-input-container">
+          <i class="fas fa-search"></i>
+          <input type="text" id="sidebar-search-client" placeholder="Rechercher un client..." 
+          class="sidebar-search-input" onkeyup="rechercherClient()">
+        </div>
         <div id="sidebar-search-results" class="sidebar-search-results"></div>
       </div>
       
@@ -54,10 +59,10 @@
           </div>
           <div class="welcome-info">
             <h3>Comment utiliser l'application :</h3>
-              <p>🔍 <strong>Rechercher un client :</strong> Utilisez la barre de recherche dans le menu de gauche</p>
-              <p>📋 <strong>Consulter les détails :</strong> Cliquez sur un client pour voir ses informations et prêts</p>
-              <p>💰 <strong>Créer un prêt :</strong> Depuis la fiche client, cliquez sur "Faire un prêt"</p>
-              <p>📊 <strong>Gérer les paramètres :</strong> Utilisez les menus pour configurer les établissements et types de prêts</p>
+              <p><i class="fas fa-search"></i> <strong>Rechercher un client :</strong> Utilisez la barre de recherche dans le menu de gauche</p>
+              <p><i class="fas fa-user-circle"></i> <strong>Consulter les détails :</strong> Cliquez sur un client pour voir ses informations et prêts</p>
+              <p><i class="fas fa-hand-holding-usd"></i> <strong>Créer un prêt :</strong> Depuis la fiche client, cliquez sur "Faire un prêt"</p>
+              <p><i class="fas fa-cog"></i> <strong>Gérer les paramètres :</strong> Utilisez les menus pour configurer les établissements et types de prêts</p>
           </div>
         </div>
       </section>
