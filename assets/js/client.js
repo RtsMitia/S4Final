@@ -7,32 +7,6 @@ function rechercherClient() {
         return;
     }
     
-    // const url = `http://localhost/ProjetFinalS4/ws/search_client.php?q=${encodeURIComponent(searchTerm)}`;
-    
-    // fetch(url)
-    //     .then(response => {
-    //         console.log('Response status:', response.status);
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP error! status: ${response.status}`);
-    //         }
-    //         return response.text();
-    //     })
-    //     .then(text => {
-    //         console.log('Réponse texte brute:', text);
-    //         try {
-    //             const data = JSON.parse(text);
-    //             afficherResultatsRecherche(data);
-    //         } catch (e) {
-    //             console.error('Erreur parsing JSON:', e);
-    //             document.getElementById('sidebar-search-results').innerHTML = 
-    //                 '<div class="sidebar-no-results">Erreur de format de données</div>';
-    //         }
-    //     })
-    //     .catch(error => {
-    //         console.error('Erreur fetch:', error);
-    //         document.getElementById('sidebar-search-results').innerHTML = 
-    //             '<div class="sidebar-no-results">Erreur de connexion</div>';
-    //     });
     const url = `/clients/search/${encodeURIComponent(searchTerm)}`;
     console.log('URL appelée:', url);
     console.log('apiBase:', apiBase);
