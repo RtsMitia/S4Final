@@ -33,7 +33,7 @@ function rechercherClient() {
     //         document.getElementById('sidebar-search-results').innerHTML = 
     //             '<div class="sidebar-no-results">Erreur de connexion</div>';
     //     });
-    const url = `/clients/search?q=${encodeURIComponent(searchTerm)}`;
+    const url = `/clients/search/${encodeURIComponent(searchTerm)}`;
     console.log('URL appelée:', url);
     console.log('apiBase:', apiBase);
     console.log('URL complète:', apiBase + url);
